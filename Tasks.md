@@ -13,7 +13,7 @@
 * Use JavaScript to validate inputs
 
 ### Back End
-* Python Face Recognition (dir: Code)
+* Python Face Recognition (dir: Code) done
   * find a library for face detection and code how it should be used
   * find a library for face recognition 
   * test it against sample pictures
@@ -28,6 +28,7 @@
 * API
   * make an API that handles requests to the main features
   * provide logs
+* Integrate
 
 ### Documentation
 * ReadMe1st.txt
