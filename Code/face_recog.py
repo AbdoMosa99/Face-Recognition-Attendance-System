@@ -10,6 +10,7 @@ def upload(path):
     img = face_recognition.load_image_file(path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     enc = face_recognition.face_encodings(img)[0] # should loop
+    print(enc)
     return enc
 
 def register(name, path):
