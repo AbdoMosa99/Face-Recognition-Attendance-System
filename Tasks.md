@@ -16,16 +16,45 @@
 * API
   * make an API that handles requests to the main features
   * provide logs
-* Python Face Recognition
+* Python Face Recognition (dir: Code)
   * find a library for face detection and code how it should be used
   * find a library for face recognition 
   * test it against sample pictures
-* Database
+* Database DB.sql (dir: DB)
   * faculty table (id, name, university)
   * students table (name, id, doctorId, facultyId, etc)
   * doctors table (name, id, etc)
   * courses table (id, name, semester, doctorId, etc)
   * Attendance (id, time, studentId, courseId, etc)
   * logs
+  * add DBCredentials.txt
 
 ### Documentation
+* ReadMe1st.txt
+  * the steps of deploying and running the project
+* ProjectDocument.docx
+  * preface
+  * introduction
+  * glossary
+  * user requirment definition
+  * system architecture
+  * system requirments specification
+  * system models
+  * system evolution
+  * appendices
+  * index
+* Demo.mp4
+  * how is the running of your code commented by your voice
+* Presentation.pptx
+  * Agenda
+  * Introduction
+  * Problem Definition
+  * Problem Description
+  * Used Components.
+  * Cost.
+  * Used Programming Language, IDEs, and any other used tools.
+  * Core Source Code.
+  * Execution Result.
+  * A video showing how to operate and run the project.
+  * Future Vision of the project.
+  * References (URLs, Books, …etc.).
