@@ -13,9 +13,6 @@
 * Use JavaScript to validate inputs
 
 ### Back End
-* API
-  * make an API that handles requests to the main features
-  * provide logs
 * Python Face Recognition (dir: Code)
   * find a library for face detection and code how it should be used
   * find a library for face recognition 
@@ -28,6 +25,9 @@
   * Attendance (id, time, studentId, courseId, etc)
   * logs
   * add DBCredentials.txt
+* API
+  * make an API that handles requests to the main features
+  * provide logs
 
 ### Documentation
 * ReadMe1st.txt
