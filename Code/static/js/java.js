@@ -12,8 +12,8 @@ function showpass() {
 /*register page*/
 
 function validateForm() {
-  var x = document.forms["myform"]["fullname"].value;
-  var e = document.forms["myform"]["email"].value;
+  var x = document.forms["myForm"]["fullname"].value;
+  var e = document.forms["myForm"]["email"].value;
   if (x == "") 
     alert("Name must be filled out");
      
