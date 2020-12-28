@@ -9,7 +9,7 @@ class Admin(db.Model):
     hashpass = db.Column(db.String(100), nullable=False)
     
     def __repr__(self):
-        return f'admin {username} created'
+        return f'Admin: username({self.username}), hash({self.hashpass})'
     
 class Log(db.Model):
     time = db.Column(db.DateTime, primary_key=True, default=datetime.now())
