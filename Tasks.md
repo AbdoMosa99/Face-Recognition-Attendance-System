@@ -28,7 +28,7 @@
 * API
   * make an API that handles requests to the main features
   * provide logs
-* Integrate
+* Make the actual backend using flask 
 
 ### Documentation
 * ReadMe1st.txt

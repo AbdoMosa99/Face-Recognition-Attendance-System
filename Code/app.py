@@ -1,10 +1,10 @@
 from flask import Flask
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB/DB.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB.db'
 
-from Code import models
-from Code import views
+from models import *
+from views import *
    
 if __name__ == '__main__':
     app.run()
