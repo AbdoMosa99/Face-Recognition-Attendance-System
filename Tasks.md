@@ -59,3 +59,9 @@
   * A video showing how to operate and run the project.
   * Future Vision of the project.
   * References (URLs, Books, …etc.).
+
+
+### Notes 
+* to run the application
+  * from the code directory 'env\Scripts\activate'
+  * 

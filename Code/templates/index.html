@@ -19,9 +19,11 @@
         </div>
         <h1 id=title>Face Recognition Attendence System</h1>
         <div class=features>
-            <button id=upload type="button">Upload</button>
-            <button id=opencamera type="button">Open Camera</button>
-            <input type="url" id="url" name="url" placeholder="put url here"><br>
+            <form action='/' method='POST' enctype='multipart/form-data' class="form-group">
+                <input id='UploadImg' type="file" name='UploadImg' class="custom-file-input">
+                <button id='opencamera' type="button" class="btn btn-primary">Open Camera</button>
+                <button id="submit_attend" type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
 	</body>
 </html>
