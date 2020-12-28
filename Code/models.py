@@ -56,14 +56,14 @@ class Student(db.Model):
     face_enc_id = db.Column(db.Integer, db.ForeignKey(FaceEncoding.id), nullable=False)
     
     def __repr__(self):
-        return f'Student {name} added'
+        return f'Student {self.name} added'
 
 class Doctor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
     
     def __repr__(self):
-        return f'Doctor {name} added'   
+        return f'Doctor {self.name} added'   
     
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -74,7 +74,7 @@ class Course(db.Model):
     doctor_id = db.Column(db.Integer, db.ForeignKey(Doctor.id), nullable=False)
                             
     def __repr__(self):
-        return f'Course {name} added for semester {semester}' 
+        return f'Course {self.name} added for semester {self.semester}' 
 
 class StudentEnrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,7 +82,7 @@ class StudentEnrollment(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey(Course.id), nullable=False)
                             
     def __repr__(self):
-        return f'Student {student_id} enrolled to course {course_id}' 
+        return f'Student {self.student_id} enrolled to course {self.course_id}' 
     
 class Attendance(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -92,4 +92,4 @@ class Attendance(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey(Course.id), nullable=False)
                             
     def __repr__(self):
-        return f'Student {student_id} attended course {course_id} lecture {lecture_number}' 
+        return f'Student {self.student_id} attended course {self.course_id} lecture {self.lecture_number}' 

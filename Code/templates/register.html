@@ -17,7 +17,7 @@
           <a class="active" href="/register">Register</a>
           <a href="/admin">Admin</a>
 		</div>
-		<form id="myForm">
+		<form id="myForm" action="/register" method="POST" enctype='multipart/form-data'>
           <label for="fullname">Full Name</label><br>
           <input type="text" id="fullname" name="fullname"><br>
           <label for="gender">Gender</label><br>
@@ -41,10 +41,10 @@
           </select><br>
           <label for="courses">Courses</label><br>
           <input type="text" id="courses" name="courses" placeholder="SE301,CS381,CS352" ><br>
-          <button id="uploadmyphoto" type="button">Upload Photo</button>
+          <input id="uploadImg" name="uploadImg" type="file">
           <button id="takephoto" type="button">Take Photo</button><br>
           <button id="reset" type="button" onclick="resetFun()">Reset</button>
-          <button id="register" type="button" onclick="validateForm()">Register</button><br>
+          <button id="register" type="submit" onclick="validateForm()">Register</button><br>
 		</form> 
 	</body>
 </html>
