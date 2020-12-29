@@ -29,10 +29,8 @@ def analyze(img):
         result = face_recognition.compare_faces([enc], unknown_enc)
         if result[0] == True:
             attendace_DB.append((now, name))
-            print((now, name))
-            return True
-    print("Unknown")
-    return False
+            return name
+    return None
     
 def main():
     img1 = cv2.imread("../res/Bill_Gates.jpg")
