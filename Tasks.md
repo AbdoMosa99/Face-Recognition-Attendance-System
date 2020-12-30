@@ -73,6 +73,7 @@
 * live feed from webcam
 * input validation with javascript
 * test and validate security
+* add course and lecture number to index.html
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'

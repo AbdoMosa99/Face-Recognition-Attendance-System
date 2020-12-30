@@ -46,7 +46,7 @@ def register():
         img = file2RGB(file)
         enc = getEncoding(img)
         
-        models.addStudent(fullname, "M", email, "Suez", "FCI", courses, enc)
+        models.addStudent(fullname, "M", email, "Suez", "FCI", courses, str(face_enc.tolist()))
         flash(fullname)
         return f"Student {fullname} Added Successfully"
         

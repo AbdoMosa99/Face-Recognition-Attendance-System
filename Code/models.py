@@ -41,7 +41,7 @@ class UniversityHasFaculties(db.Model):
     def __repr__(self):
         return f'University {self.university_id} has faculty {self.faculty_id}.'
     
-class   FaceEncoding(db.Model):
+class FaceEncoding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encoding = db.Column(db.String(4000), nullable=False)
     
@@ -97,21 +97,29 @@ class Attendance(db.Model):
 
 #===== Functions ======
 
+
 def addStudent(name, gender, email, university, faculty, courses, face_enc):
     faculty = Faculty.query.filter(Faculty.name == faculty).first()
+    if not faculty:
+        return None
+    
     university = University.query.filter(University.name == university).first()
+    if not university:
+        return None
+    
     fac_uni = UniversityHasFaculties.query.filter(and_(UniversityHasFaculties.university_id == university.id, UniversityHasFaculties.faculty_id == faculty.id)).first()
+    if not fac_uni:
+        return None
     
-    encoding = FaceEncoding(encoding=str(face_enc.tolist()))
+    encoding = FaceEncoding(encoding=face_enc)
     db.session.add(encoding)
-    db.session.commit()
-    encoding = FaceEncoding.query.order_by(FaceEncoding.id.desc()).first()
-    student = Student(name=name, gender=gender, email=email, face_enc_id=encoding.id, fac_uni_id=fac_uni.id)
+    db.session.flush()
     
-    # db.session.add(encoding)
+    student = Student(name=name, gender=gender, email=email, face_enc_id=encoding.id, fac_uni_id=fac_uni.id)
     db.session.add(student)
     
     db.session.commit()
+    return student.id
 
 def addFaculty(fac, uni):
     university = University.query.filter(University.name == uni).first()
@@ -130,10 +138,13 @@ def addFaculty(fac, uni):
         db.session.add(uni_fac)
                                                   
     db.session.commit()
+    return uni_fac.id
         
 def addDoctor(name):
-    doctor = Doctor(name = name)
-    db.session.add(doctor)
+    doctor = Doctor.query.filter(Doctor.name == name).first()
+    if not doctor:
+        doctor = Doctor(name=name)
+        db.session.add(doctor)
     
     db.session.commit()
 
@@ -144,38 +155,45 @@ def addCourse(code, name, semester, n_lectures, doctorName):
 
     db.session.commit()
 
-def AddAttendace(lecture_number, studentName, courseName, time):
-    student = Student.query.filter(Student.name == studentName).first()
-    course = Course.query.filter(Course.name == courseName).first()
+def addAttendace(lecture_number, student_id, course_id, time):
     attendance = Attendance(time=time, lecture_number=lecture_number,student_id=student.id, course_id=course.id)
     db.session.add(course)
 
     db.session.commit()
 
+    
 # Update Functions
 
+
 def updateStudent(name, gender, email, university, faculty, courses, id):
-    student = Student.query.filter(student_id == id).first()
+    student = Student.query.filter(Student.id == id).first()
+    if not student:
+        return None
+    
     student.name = name
     student.gender = gender
     student.email = email
     student.courses = courses
 
     faculty = Faculty.query.filter(Faculty.name == faculty).first()
+    if not faculty:
+        return None
+        
     university = University.query.filter(University.name == university).first()
+    if not university:
+        return None
+    
     fac_uni = UniversityHasFaculties.query.filter(and_(UniversityHasFaculties.university_id == university.id, UniversityHasFaculties.faculty_id == faculty.id)).first()
+    if not fac_uni:
+        return None
+    
     student.fac_uni_id = fac_uni.id
 
     db.session.commit()
-
-def updateDoctor(name, id): 
-    doctor = Doctor.query.filter(doctor_id == id).first()
-    doctor.name = name
-
-    db.session.commit()
+    return id
 
 def updateCourse(code, name, semester, n_lectures, doctorName, id):
-    course = Course.query.filter(course_id == id).first()
+    course = Course.query.filter(Course.id == id).first()
     course.code = code
     course.name = name
     course. semester = semester
@@ -187,18 +205,106 @@ def updateCourse(code, name, semester, n_lectures, doctorName, id):
 
 # Deleting Functions
 
-def deleteStudent(id):
-    Student.query.filter(Student.id == id).delete()
 
+
+
+def deleteStudent(id):
+    student = Student.query.filter(Student.id == id).first()
+    if not student:
+        return None
+    
+    FaceEncoding.query.filter(FaceEncoding.id == student.face_enc_id).delete()
+    Student.query.filter(Student.id == id).delete()
     db.session.commit()
+    return id
+
+def deleteFaculty(id):
+    uni_fac = UniversityHasFaculties.query.filter(UniversityHasFaculties.id == id).delete()
+    db.session.commit()
+    return id
 
 def deleteCourse(id):
     Course.query.filter(Course.id == id).delete()
-
     db.session.commit()
+    return id
 
 def deleteDoctor(id):  
     Doctor.query.filter(Doctor.id == id).delete()
-
     db.session.commit()
+    return id
     
+# Getting Functions
+
+
+def getStudents():
+    studentObjs = Student.query.all()
+    students = []
+    
+    for studentObj in studentObjs:        
+        fac_uni = UniversityHasFaculties.query.filter(UniversityHasFaculties.id == studentObj.fac_uni_id).first()
+        faculty = Faculty.query.filter(Faculty.id == fac_uni.faculty_id).first()
+        university = University.query.filter(University.id == fac_uni.university_id).first()
+        
+        student = {}
+        student["id"] = studentObj.id
+        student["name"] = studentObj.name
+        student["gender"] = studentObj.gender
+        student["email"] = studentObj.email
+        student["university"] = university.name
+        student["faculty"] = faculty.name
+        # student["courses"] = studentObj.courses
+        
+        students.append(student)
+    return students
+
+def getFaculties():
+    fac_uni_objs = UniversityHasFaculties.query.all()
+    faculties = []
+    
+    for fac_uni_obj in fac_uni_objs:        
+        faculty = Faculty.query.filter(Faculty.id == fac_uni_obj.faculty_id).first()
+        university = University.query.filter(University.id == fac_uni_obj.university_id).first()
+        
+        fac_uni = {}
+        fac_uni["id"] = fac_uni_obj.id
+        fac_uni["faculty"] = faculty.name
+        fac_uni["university"] = university.name
+        
+        faculties.append(fac_uni)
+        
+    return faculties
+
+def getDoctors():
+    doctor_objs = Doctor.query.all()
+    doctors = []
+    
+    for doctor_obj in doctor_objs:        
+        doctor = {}
+        doctor["id"] = doctor_obj.id
+        doctor["name"] = doctor_obj.name
+        
+        doctors.append(doctor)
+        
+    return doctors
+def getCourses():
+    pass
+
+def getAttendance():
+    attendace_objs = Attendance.query.all()
+    attendances = []
+    
+    for attendace_obj in attendace_objs:
+        student = Student.query.filter(Student.id == attendace_obj.student_id).first()
+        course = Course.query.filter(Course.id == attendace_obj.course_id).first()
+        
+        attendance = {}
+        attendance["id"] = attendace_obj.id
+        attendance["time"] = attendace_obj.time
+        attendance["student"] = student.name
+        attendance["course"] = course.name
+        attendance["lecture_number"] = attendace_obj.lecture_number
+        
+        attendances.append(attendance)
+        
+    return attendances
+        
