@@ -61,7 +61,20 @@
   * References (URLs, Books, …etc.).
 
 
+### Current Tasks
+* fix env folder
+* implement functions to deal with database in models (updateStudent(), deleteStudent(), addDoctor(), etc)
+* reflect attendace to the database
+* create logs
+* create html for data with links (Students, Faculties, Doctors, Courses, Attendace, Logs)
+* add student id to register form
+* Error page
+* create base.html
+* live feed from webcam
+* input validation with javascript
+* test and validate security
+
 ### Notes 
 * to run the application
   * from the code directory 'env\Scripts\activate'
-  * 
+  * run flask in debug mode 'set FLASK_ENV=development'

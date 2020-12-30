@@ -34,9 +34,4 @@ def analyze(img):
             return None
     return None
     
-def main():
-    img1 = cv2.imread("../res/Bill_Gates.jpg")
-    img2 = cv2.imread("../res/Elon_Musk.jpg")
-    register("Bill Gates", img1)
-    register("Elon Musk", img2)
     

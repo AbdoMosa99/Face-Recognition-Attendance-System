@@ -28,7 +28,7 @@ def index():
                 flash(f'Sorry! We couldn\'t identify you.')
                 return redirect('/')
         else:
-            flash(f'No imges were uploaded!')
+            flash(f'No images were uploaded!')
             return redirect('/')
     else:
         return render_template("index.html")

@@ -41,7 +41,7 @@ class UniversityHasFaculties(db.Model):
     def __repr__(self):
         return f'University {self.university_id} has faculty {self.faculty_id}.'
     
-class FaceEncoding(db.Model):
+class   FaceEncoding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encoding = db.Column(db.String(4000), nullable=False)
     
@@ -94,6 +94,9 @@ class Attendance(db.Model):
                             
     def __repr__(self):
         return f'Student {self.student_id} attended course {self.course_id} lecture {self.lecture_number}' 
+
+    
+# Functions 
 
 def addStudent(name, gender, email, university, faculty, courses, face_enc):
     faculty = Faculty.query.filter(Faculty.name == faculty).first()
