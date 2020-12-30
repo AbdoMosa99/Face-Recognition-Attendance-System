@@ -95,7 +95,7 @@ class Attendance(db.Model):
     def __repr__(self):
         return f'Student {self.student_id} attended course {self.course_id} lecture {self.lecture_number}' 
 
-    
+#===== Functions ======
 
 def addStudent(name, gender, email, university, faculty, courses, face_enc):
     faculty = Faculty.query.filter(Faculty.name == faculty).first()
@@ -201,3 +201,4 @@ def deleteDoctor(id):
     Doctor.query.filter(Doctor.id == id).delete()
 
     db.session.commit()
+    

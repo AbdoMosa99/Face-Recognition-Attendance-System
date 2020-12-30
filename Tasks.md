@@ -62,7 +62,7 @@
 
 
 ### Current Tasks
-* fix env folder
+* fix env folder (done)
 * implement functions to deal with database in models (updateStudent(), deleteStudent(), addDoctor(), etc)
 * reflect attendace to the database
 * create logs
