@@ -96,7 +96,6 @@ class Attendance(db.Model):
         return f'Student {self.student_id} attended course {self.course_id} lecture {self.lecture_number}' 
 
     
-# Functions 
 
 def addStudent(name, gender, email, university, faculty, courses, face_enc):
     faculty = Faculty.query.filter(Faculty.name == faculty).first()
@@ -132,13 +131,73 @@ def addFaculty(fac, uni):
                                                   
     db.session.commit()
         
-        
-        
-        
-        
-        
-        
-        
-        
+def addDoctor(name):
+    doctor = Doctor(name = name)
+    db.session.add(doctor)
     
-    
+    db.session.commit()
+
+def addCourse(code, name, semester, n_lectures, doctorName):
+    doctor = Doctor.query.filter(Doctor.name == doctorName).first()
+    course = Course(code=code, name=name, semester=semester, n_lectures=n_lectures, doctor_id=doctor.id)
+    db.session.add(course)
+
+    db.session.commit()
+
+def AddAttendace(lecture_number, studentName, courseName, time):
+    student = Student.query.filter(Student.name == studentName).first()
+    course = Course.query.filter(Course.name == courseName).first()
+    attendance = Attendance(time=time, lecture_number=lecture_number,student_id=student.id, course_id=course.id)
+    db.session.add(course)
+
+    db.session.commit()
+
+# Update Functions
+
+def updateStudent(name, gender, email, university, faculty, courses, id):
+    student = Student.query.filter(student_id == id).first()
+    student.name = name
+    student.gender = gender
+    student.email = email
+    student.courses = courses
+
+    faculty = Faculty.query.filter(Faculty.name == faculty).first()
+    university = University.query.filter(University.name == university).first()
+    fac_uni = UniversityHasFaculties.query.filter(and_(UniversityHasFaculties.university_id == university.id, UniversityHasFaculties.faculty_id == faculty.id)).first()
+    student.fac_uni_id = fac_uni.id
+
+    db.session.commit()
+
+def updateDoctor(name, id): 
+    doctor = Doctor.query.filter(doctor_id == id).first()
+    doctor.name = name
+
+    db.session.commit()
+
+def updateCourse(code, name, semester, n_lectures, doctorName, id):
+    course = Course.query.filter(course_id == id).first()
+    course.code = code
+    course.name = name
+    course. semester = semester
+    course.n_lectures = n_lectures
+    doctor = Doctor.query.filter(Doctor.name == doctorName).first()
+    course.doctor_id = doctor.id
+ 
+    db.session.commit()
+
+# Deleting Functions
+
+def deleteStudent(id):
+    Student.query.filter(Student.id == id).delete()
+
+    db.session.commit()
+
+def deleteCourse(id):
+    Course.query.filter(Course.id == id).delete()
+
+    db.session.commit()
+
+def deleteDoctor(id):  
+    Doctor.query.filter(Doctor.id == id).delete()
+
+    db.session.commit()
