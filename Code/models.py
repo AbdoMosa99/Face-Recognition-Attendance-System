@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import *
 from app import app
 from datetime import datetime
 
@@ -16,21 +17,21 @@ class Log(db.Model):
     activity = db.Column(db.String(200), nullable=False)
     
     def __repr__(self):
-        return f'Faculty {name} created'
+        return f'Faculty {self.activity} created'
     
 class University(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
     
     def __repr__(self):
-        return f'University {name} created'
+        return f'University {self.name} created'
     
 class Faculty(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), nullable=False)
     
     def __repr__(self):
-        return f'Faculty {name} created'
+        return f'Faculty {self.name} created'
     
 class UniversityHasFaculties(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,14 +39,14 @@ class UniversityHasFaculties(db.Model):
     faculty_id = db.Column(db.Integer, db.ForeignKey(Faculty.id), nullable=False)
     
     def __repr__(self):
-        return f'University {university_id} has faculty {faculty_id}.'
+        return f'University {self.university_id} has faculty {self.faculty_id}.'
     
 class FaceEncoding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    encoding = db.Column(db.String(2000), nullable=False)
+    encoding = db.Column(db.String(4000), nullable=False)
     
     def __repr__(self):
-        return f'Encoding {id} created'
+        return f'Encoding {self.id} created'
     
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -93,3 +94,48 @@ class Attendance(db.Model):
                             
     def __repr__(self):
         return f'Student {self.student_id} attended course {self.course_id} lecture {self.lecture_number}' 
+
+def addStudent(name, gender, email, university, faculty, courses, face_enc):
+    faculty = Faculty.query.filter(Faculty.name == faculty).first()
+    university = University.query.filter(University.name == university).first()
+    fac_uni = UniversityHasFaculties.query.filter(and_(UniversityHasFaculties.university_id == university.id, UniversityHasFaculties.faculty_id == faculty.id)).first()
+    
+    encoding = FaceEncoding(encoding=str(face_enc.tolist()))
+    db.session.add(encoding)
+    db.session.commit()
+    encoding = FaceEncoding.query.order_by(FaceEncoding.id.desc()).first()
+    student = Student(name=name, gender=gender, email=email, face_enc_id=encoding.id, fac_uni_id=fac_uni.id)
+    
+    # db.session.add(encoding)
+    db.session.add(student)
+    
+    db.session.commit()
+
+def addFaculty(fac, uni):
+    university = University.query.filter(University.name == uni).first()
+    if not university:
+        university = University(name=uni)
+        db.session.add(university)
+        
+    faculty = Faculty.query.filter(Faculty.name == fac).first()
+    if not faculty:
+        faculty = Faculty(name=fac)
+        db.session.add(faculty)
+        
+    uni_fac = UniversityHasFaculties.query.filter(and_(university.id == UniversityHasFaculties.university_id, faculty.id == UniversityHasFaculties.faculty_id)).first()
+    if not uni_fac:
+        uni_fac = UniversityHasFaculties(university_id=university.id, faculty_id=faculty.id)
+        db.session.add(uni_fac)
+                                                  
+    db.session.commit()
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    

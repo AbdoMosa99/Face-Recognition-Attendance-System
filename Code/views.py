@@ -18,9 +18,8 @@ def before_request():
 def index():
     if (request.method == 'POST'):
         if request.files:
-            main()
             img = request.files["UploadImg"]
-            img = convertImg(img)
+            img = file2RGB(img)
             res = analyze(img)
             if res:
                 flash(f'Hey {res}! You have successfuly been submited.')
@@ -34,10 +33,8 @@ def index():
     else:
         return render_template("index.html")
 
-uid = 1
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    global uid
     if (request.method == 'POST'):
         fullname = request.form['fullname'] 
         # gender = request.form['gender'] # can't because it's not an input
@@ -45,19 +42,13 @@ def register():
         # university = request.form['university'] 
         # faculty = request.form['faculty']
         courses = request.form['courses']
-        img = request.files["uploadImg"]
-        img = convertImg(img)
-        enc = getEncodings(img)
+        file = request.files["uploadImg"]
+        img = file2RGB(file)
+        enc = getEncoding(img)
         
-        e = models.FaceEncoding(id=uid, encoding=str(enc))
-        s = models.Student(id=uid, name=fullname, gender="M", email=email, face_enc_id=uid, fac_uni_id=uid)
-        models.db.session.add(e)
-        models.db.session.add(s)
-        models.db.session.commit()
-        print(models.FaceEncoding.query.all())
-        print(models.Student.query.all())
-        uid += 1
-        return "Success"
+        models.addStudent(fullname, "M", email, "Suez", "FCI", courses, enc)
+        flash(fullname)
+        return f"Student {fullname} Added Successfully"
         
     return render_template("register.html")
 
