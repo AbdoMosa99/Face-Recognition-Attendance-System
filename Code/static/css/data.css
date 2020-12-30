@@ -1,0 +1,37 @@
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  
+}
+/* Control the left side */
+.left {
+  width: 20%;
+  left: 0;
+  background-color: #327ba8;
+}
+
+/* Control the right side */
+.right {
+ width: 80%;
+ right: 0;
+
+}
+#addButton
+{
+  background-color: #327ba8;
+  border: none;
+  color: white;
+  padding: 15px;
+  width: 150px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+.dataPage
+{
+  margin-left: 20px;	
+}
