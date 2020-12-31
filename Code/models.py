@@ -168,8 +168,8 @@ def addCourse(code, name, semester, n_lectures, doctorName):
     db.session.commit()
     return course.id
 
-def addAttendace(lecture_number, student_id, course_id):
-    attendance = Attendance(time=datetime.now(), lecture_number=lecture_number,student_id=student.id, course_id=course.id)
+def addAttendance(lecture_number, student_id, course_id):
+    attendance = Attendance(time=datetime.now(), lecture_number=lecture_number,student_id=student_id, course_id=course_id)
     db.session.add(attendance)
 
     db.session.commit()

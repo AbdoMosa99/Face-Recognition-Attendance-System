@@ -30,7 +30,7 @@ def analyze(img):
         if result[0] == True:
             student = Student.query.filter(encc.id == Student.face_enc_id).first()
             if student:
-                return student.name
+                return student
             return None
     return None
     

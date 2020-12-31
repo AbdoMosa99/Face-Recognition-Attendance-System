@@ -22,7 +22,8 @@ def index():
             img = file2RGB(img)
             res = analyze(img)
             if res:
-                flash(f'Hey {res}! You have successfuly been submited.')
+                models.addAttendance(1, res.id, 1)
+                flash(f'Hey {res.name}! You have successfuly been submited.')
                 return redirect('/')
             else:
                 flash(f'Sorry! We couldn\'t identify you.')
