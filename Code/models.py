@@ -205,6 +205,7 @@ def updateStudent(name, gender, email, university, faculty, courses, id):
         return None
     
     student.fac_uni_id = fac_uni.id
+    addLog(f"User {name} with ID {id} was updated Successfully")
 
     db.session.commit()
     return id
@@ -218,7 +219,8 @@ def updateCourse(code, name, semester, n_lectures, doctorName, id):
     course.semester = semester
     course.n_lectures = n_lectures
     course.doctor_id = doctor.id
- 
+    addLog(f"Course {name}:{code} with ID {id} was updated Successfully")
+
     db.session.commit()
 
 # Deleting Functions
@@ -227,24 +229,29 @@ def deleteStudent(id):
     student = Student.query.filter(Student.id == id).first()
     if not student:
         return None
-    
+
     FaceEncoding.query.filter(FaceEncoding.id == student.face_enc_id).delete()
     Student.query.filter(Student.id == id).delete()
+    addLog(f"Student with ID {id} was deleted Successfully")
+
     db.session.commit()
     return id
 
 def deleteFaculty(id):
     uni_fac = UniversityHasFaculties.query.filter(UniversityHasFaculties.id == id).delete()
+    addLog(f"Faculty with ID {id} was deleted Successfully")
     db.session.commit()
     return id
 
 def deleteCourse(id):
     Course.query.filter(Course.id == id).delete()
+    addLog(f"Course with ID {id} was deleted Successfully")
     db.session.commit()
     return id
 
 def deleteDoctor(id):  
     Doctor.query.filter(Doctor.id == id).delete()
+    addLog(f"Doctor with ID {id} was deleted Successfully")
     db.session.commit()
     return id
     
