@@ -36,18 +36,22 @@ def index():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if (request.method == 'POST'):
+        id = request.form['studentid']
         fullname = request.form['fullname'] 
-        # gender = request.form['gender'] # can't because it's not an input
+        gender = request.form['gender']
         email = request.form['email'] 
-        # university = request.form['university'] 
-        # faculty = request.form['faculty']
+        university = request.form['university']
+        faculty = request.form['faculty']
         courses = request.form['courses']
-        file = request.files["uploadImg"]
+        file = request.files['uploadImg']
+        
         img = file2RGB(file)
         enc = getEncoding(img)
+        courses = courses.split(',')
         
-        models.addStudent(fullname, "M", email, "Suez", "FCI", courses, str(face_enc.tolist()))
-        flash(fullname)
+        s = models.addStudent(id, fullname, gender, email, university, faculty, courses, str(enc.tolist()))
+        if not s:
+            return redirect('/error')
         return f"Student {fullname} Added Successfully"
         
     return render_template("register.html")
@@ -72,7 +76,8 @@ def admin():
                 except:
                     return "Wrong password!"
             return "Wrong Username!"
-                
+    if g.user:
+        return redirect('/data')
     return render_template("admin.html")
 
 
@@ -84,8 +89,9 @@ def data():
         return render_template("data.html")
     return redirect('/admin')
 
-
-
+@app.route('/error')
+def error():
+    return render_template('error.html')
 
 
 

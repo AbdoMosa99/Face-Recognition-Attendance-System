@@ -68,7 +68,7 @@ class Doctor(db.Model):
     
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(10), nullable=False)
+    code = db.Column(db.String(10), nullable=False, unique=True)
     name = db.Column(db.String(45), nullable=False)
     semester = db.Column(db.String(45), nullable=False)
     n_lectures = db.Column(db.Integer)
@@ -97,8 +97,7 @@ class Attendance(db.Model):
 
 #===== Functions ======
 
-
-def addStudent(name, gender, email, university, faculty, courses, face_enc):
+def addStudent(id, name, gender, email, university, faculty, courses, face_enc):
     faculty = Faculty.query.filter(Faculty.name == faculty).first()
     if not faculty:
         return None
@@ -115,8 +114,17 @@ def addStudent(name, gender, email, university, faculty, courses, face_enc):
     db.session.add(encoding)
     db.session.flush()
     
-    student = Student(name=name, gender=gender, email=email, face_enc_id=encoding.id, fac_uni_id=fac_uni.id)
+    student = Student(id=id, name=name, gender=gender, email=email, face_enc_id=encoding.id, fac_uni_id=fac_uni.id)
     db.session.add(student)
+    db.session.flush()
+    
+    for course_code in courses:
+        course = Course.query.filter(Course.code == course_code).first()
+        if not course:
+            continue
+        
+        student_courses = StudentEnrollment(student_id=student.id, course_id=course.id)
+        db.session.add(student_courses)
     
     db.session.commit()
     return student.id
@@ -147,23 +155,32 @@ def addDoctor(name):
         db.session.add(doctor)
     
     db.session.commit()
+    return doctor.id
 
 def addCourse(code, name, semester, n_lectures, doctorName):
     doctor = Doctor.query.filter(Doctor.name == doctorName).first()
+    if not doctor: 
+        return None
+    
     course = Course(code=code, name=name, semester=semester, n_lectures=n_lectures, doctor_id=doctor.id)
     db.session.add(course)
 
     db.session.commit()
+    return course.id
 
-def addAttendace(lecture_number, student_id, course_id, time):
-    attendance = Attendance(time=time, lecture_number=lecture_number,student_id=student.id, course_id=course.id)
-    db.session.add(course)
+def addAttendace(lecture_number, student_id, course_id):
+    attendance = Attendance(time=datetime.now(), lecture_number=lecture_number,student_id=student.id, course_id=course.id)
+    db.session.add(attendance)
 
     db.session.commit()
 
+def addLog(activity):
+    log = Log(time=datetime.now(), activity=activity)
+    db.session.add(log)
+    db.session.commit()
+    
     
 # Update Functions
-
 
 def updateStudent(name, gender, email, university, faculty, courses, id):
     student = Student.query.filter(Student.id == id).first()
@@ -194,19 +211,17 @@ def updateStudent(name, gender, email, university, faculty, courses, id):
 
 def updateCourse(code, name, semester, n_lectures, doctorName, id):
     course = Course.query.filter(Course.id == id).first()
+    doctor = Doctor.query.filter(Doctor.name == doctorName).first()
+    
     course.code = code
     course.name = name
-    course. semester = semester
+    course.semester = semester
     course.n_lectures = n_lectures
-    doctor = Doctor.query.filter(Doctor.name == doctorName).first()
     course.doctor_id = doctor.id
  
     db.session.commit()
 
 # Deleting Functions
-
-
-
 
 def deleteStudent(id):
     student = Student.query.filter(Student.id == id).first()
@@ -287,7 +302,22 @@ def getDoctors():
         
     return doctors
 def getCourses():
-    pass
+    course_objs = Course.query.all()
+    courses = []
+    
+    for course_obj in course_objs:
+        doctor = Doctor.query.filter(Doctor.id == course_obj.doctor_id).first()
+        
+        course = {}
+        course["id"] = course_obj.id
+        course["name"] = course_obj.name
+        course["semester"] = course_obj.semester
+        course["n_lectures"] = course_obj.n_lectures
+        course["doctor"] = doctor.name
+        
+        courses.append(course)
+        
+    return courses
 
 def getAttendance():
     attendace_objs = Attendance.query.all()

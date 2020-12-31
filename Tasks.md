@@ -62,18 +62,14 @@
 
 
 ### Current Tasks
-* fix env folder (done)
-* implement functions to deal with database in models (updateStudent(), deleteStudent(), addDoctor(), etc)
+* add logs
 * reflect attendace to the database
-* create logs
-* create html for data with links (Students, Faculties, Doctors, Courses, Attendace, Logs)
-* add student id to register form
-* Error page
-* create base.html
-* live feed from webcam
+* create html for data with links (Students, Faculties, Doctors, Courses, Attendace, Logs) (Mahrous)
 * input validation with javascript
+* add course and lecture number to index.html (Mahrous)
+
+* live feed from webcam
 * test and validate security
-* add course and lecture number to index.html
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'
