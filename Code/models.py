@@ -124,6 +124,7 @@ def addStudent(id, name, gender, email, university, faculty, courses, face_enc):
         db.session.add(student_courses)
     
     db.session.commit()
+    addLog(f"Student {name} with ID {id} was added Successfully")
     return student.id
 
 def addFaculty(fac, uni):
@@ -143,6 +144,7 @@ def addFaculty(fac, uni):
         db.session.add(uni_fac)
                                                   
     db.session.commit()
+    addLog(f"Faculty {fac}, {uni} was added Successfully")
     return uni_fac.id
         
 def addDoctor(name):
@@ -152,6 +154,7 @@ def addDoctor(name):
         db.session.add(doctor)
     
     db.session.commit()
+    addLog(f"Doctor {name} with ID {doctor.id} was added Successfully")
     return doctor.id
 
 def addCourse(code, name, semester, n_lectures, doctorName):
@@ -163,13 +166,20 @@ def addCourse(code, name, semester, n_lectures, doctorName):
     db.session.add(course)
 
     db.session.commit()
+    addLog(f"Course {name} with code {code} was added Successfully")
     return course.id
 
-def addAttendance(lecture_number, student_id, course_id):
-    attendance = Attendance(time=datetime.now(), lecture_number=lecture_number,student_id=student_id, course_id=course_id)
+def addAttendance(lecture_number, course_code, student_id):
+    course = Course.query.filter(Course.code == course_code).first()
+    if not course:
+        return None
+    
+    attendance = Attendance(time=datetime.now(), lecture_number=lecture_number,student_id=student_id, course_id=course.id)
     db.session.add(attendance)
 
     db.session.commit()
+    addLog(f"Student with id {student_id} have attended lecture {lecture_number} in {course_code}")
+    return attendance.id
 
 def addLog(activity):
     log = Log(time=datetime.now(), activity=activity)

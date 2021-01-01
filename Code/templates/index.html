@@ -13,9 +13,12 @@
         <h1 id="title">Face Recognition Attendence System</h1>
         <div class=features>
             <form action='/' method='POST' enctype='multipart/form-data' class="form-group">
-                <input id='studentID' type="text" name='studentID' placeholder="Student ID"></input>
-                <input id='lectureNUM' type="text" name='lectureNUM' placeholder="Lecture Number"></input>
+                <input id='courseCode' type="text" name='courseCode' placeholder="Course Code">
+                <input id='lectureNUM' type="number" name='lectureNUM' placeholder="Lecture Number">
+                <br>
+                <input id='UploadImg' name='UploadImg' type='file'>
                 <button id='opencamera' type="button" class="btn btn-primary">Open Camera</button>
+                <br>
                 <button id="submit_attend" type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

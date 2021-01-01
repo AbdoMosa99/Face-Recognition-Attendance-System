@@ -18,11 +18,18 @@ def before_request():
 def index():
     if (request.method == 'POST'):
         if request.files:
-            img = request.files["UploadImg"]
-            img = file2RGB(img)
+            course_code = request.form['courseCode']
+            lec_n = request.form['lectureNUM']
+            file = request.files["UploadImg"]
+            
+            
+            img = file2RGB(file)
             res = analyze(img)
             if res:
-                models.addAttendance(1, res.id, 1)
+                x = models.addAttendance(lec_n, course_code, res.id)
+                if not x:
+                    return redirect('/error')
+                
                 flash(f'Hey {res.name}! You have successfuly been submited.')
                 return redirect('/')
             else:
