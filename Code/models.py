@@ -1,9 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
-from app import app
+from app import db
 from datetime import datetime
-
-db = SQLAlchemy(app)
 
 class Admin(db.Model):
     username = db.Column(db.String(45), primary_key=True)
@@ -345,3 +342,15 @@ def getAttendance():
         
     return attendances
         
+def getLogs():
+    log_objs = Log.query.all()
+    logs = []
+    
+    for log_obj in log_objs:
+        log = {}
+        log["time"] = log_obj.time
+        log["activity"] = log_obj.activity
+        
+        logs.append(log)
+        
+    return logs

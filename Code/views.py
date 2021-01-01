@@ -94,7 +94,44 @@ def data():
 def error():
     return render_template('error.html')
 
+@app.route('/data/students')
+def displayStudents():
+    if g.user:
+        table = models.getStudents()
+        return render_template("data.html", table=table)
+    return redirect('/admin')
 
+@app.route('/data/faculties')
+def displayFaculties():
+    if g.user:
+        table = models.getFaculties()
+        return render_template("data.html", table=table)
+    return redirect('/admin')
 
+@app.route('/data/doctors')
+def displayDoctors():
+    if g.user:
+        table = models.getDoctors()
+        return render_template("data.html", table=table)
+    return redirect('/admin')
 
+@app.route('/data/courses')
+def displayCourses():
+    if g.user:
+        table = models.getCourses()
+        return render_template("data.html", table=table)
+    return redirect('/admin')
 
+@app.route('/data/attendance')
+def displayAttendance():
+    if g.user:
+        table = models.getAttendance()
+        return render_template("data.html", table=table)
+    return redirect('/admin')
+
+@app.route('/data/logs')
+def displayLogs():
+    if g.user:
+        table = models.getLogs()
+        return render_template("data.html", table=table)
+    return redirect('/admin')

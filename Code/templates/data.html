@@ -8,12 +8,12 @@
     <div class="split left">
         <div class="list">
             <label id="adminname">Admin Name</label><br>
-            <a href="">Students</a><br>
-            <a href="">Faculties</a><br>
-            <a href="">Doctors</a><br>
-            <a href="">Courses</a><br>
-            <a href="">Attendance</a><br>
-            <a href="">Logs</a><br>
+            <a href="{{ url_for('displayStudents') }}">Students</a><br>
+            <a href="{{ url_for('displayFaculties') }}">Faculties</a><br>
+            <a href="{{ url_for('displayDoctors') }}">Doctors</a><br>
+            <a href="{{ url_for('displayCourses') }}">Courses</a><br>
+            <a href="{{ url_for('displayAttendance') }}">Attendance</a><br>
+            <a href="{{ url_for('displayLogs') }}">Logs</a><br>
 
         </div>
         
@@ -30,42 +30,25 @@
             <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search"
             aria-label="Search">
             </form><br>
-            <button class="btn btn-primary"class="addButton"type="button">add</button><br>
                 <table class="table">
                       <thead class="thead-dark">
+                        {% if table %}
                         <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">First</th>
-                          <th scope="col">Last</th>
-                          <th scope="col">Handle</th>
+                            {% for key in table[0].keys() %}
+                              <th>{{ key }}</th>
+                            {% endfor %}
                         </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>
-                            <button class="btn btn-primary">Delete</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>
-                            <button class="btn btn-primary">Delete</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>
-                            <button class="btn btn-primary">Delete</button>
-                          </td>
-                        </tr>
-                      </tbody>
+                          </thead>
+                          <tbody>
+                                {% for row in table %}
+                                    <tr>
+                                    {% for key in row.keys() %}
+                                        <td>{{ row[key] }}</td>
+                                    {% endfor %}
+                                    </tr>
+                                {% endfor %}                            
+                          </tbody>
+                        {% endif %}
                 </table>
             </div>
 
