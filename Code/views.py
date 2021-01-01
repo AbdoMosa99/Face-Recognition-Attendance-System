@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, session, request, g, flash
+from flask import render_template, redirect, url_for, session, request, g, flash, Response
 from argon2 import PasswordHasher
 from app import app
 import models
@@ -63,6 +63,16 @@ def register():
         return f"Student {fullname} Added Successfully"
         
     return render_template("register.html")
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/camfeed')
+def camfeed():
+    return render_template("camfeed.html")
+
+
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
