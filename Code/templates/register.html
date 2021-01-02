@@ -6,7 +6,7 @@
 
 {% block body %}
 <script src="../static/js/bootstrap-validate.js"></script>
-  <div class="topnav">
+    <div class="topnav">
           <a href="/">Home</a>
           <a class="active" href="/register">Register</a>
           <a href="/admin">Admin</a>
@@ -25,18 +25,18 @@
           <input type="text" id="email" name="email"><br>
           <label for="university">University</label><br>
           <select name="university" id="university">
-              <option value="Suez">Suez</option>
-              <option value="cairo">Cairo</option>
-              <option value="suez canal">Suez Canal</option>
-              <option value="ain shams">Ain Shams</option>
+              {% for university in universities %}
+                    <option value="{{ university.name }}">{{ university.name }}</option>
+              {% endfor %}
           </select><br>
           <label for="faculty">Faculty</label><br>
           <select name="faculty" id="faculty">
-              <option value="FCI">Computers and Information</option>
-              <option value="engineering">Engineering</option>
+              {% for faculty in faculties %}
+                    <option value="{{ faculty.name }}">{{ faculty.name }}</option>
+              {% endfor %}
           </select><br>
           <label for="courses">Courses</label><br>
-          <input type="text" id="courses" name="courses" placeholder="SE301,CS381,CS352 or none" ><br>
+          <input type="text" id="courses" name="courses" placeholder="SE301,CS381,CS352" ><br>
           <input id="uploadImg" name="uploadImg" type="file"><br>
           <button class="btn btn-primary" id="takephoto" type="button">Take Photo</button><br>
           <button class="btn btn-primary"id="reset" type="button" onclick="resetFun()">Reset</button>

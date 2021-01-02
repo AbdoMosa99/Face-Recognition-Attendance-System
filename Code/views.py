@@ -61,8 +61,10 @@ def register():
         if not s:
             return redirect('/error')
         return f"Student {fullname} Added Successfully"
-        
-    return render_template("register.html")
+    
+    unis = models.University.query.all()
+    facs = models.Faculty.query.all()
+    return render_template("register.html", universities=unis, faculties=facs)
 
 @app.route('/video_feed')
 def video_feed():

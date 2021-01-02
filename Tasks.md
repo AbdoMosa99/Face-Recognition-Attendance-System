@@ -62,13 +62,7 @@
 
 
 ### Current Tasks
-* add logs
-* reflect attendace to the database
-* create html for data with links (Students, Faculties, Doctors, Courses, Attendace, Logs) (Mahrous)
 * input validation with javascript
-* add course and lecture number to index.html (Mahrous)
-
-* live feed from webcam
 * test and validate security
 
 ### Notes 

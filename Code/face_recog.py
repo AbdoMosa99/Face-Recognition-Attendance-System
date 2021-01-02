@@ -17,9 +17,6 @@ def getEncoding(img):
     enc = face_recognition.face_encodings(img)
     return enc[0]
 
-def register(name, img):
-    enc = getEncoding(img)
-
 def analyze(img):
     unknown_enc = getEncoding(img)
     encodings = FaceEncoding.query.all()
