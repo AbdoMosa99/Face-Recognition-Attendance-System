@@ -3,6 +3,7 @@ from argon2 import PasswordHasher
 from app import app
 import models
 from face_recog import *
+import requests
 
 
 @app.before_request
@@ -22,19 +23,18 @@ def index():
             lec_n = request.form['lectureNUM']
             file = request.files["UploadImg"]
             
+            files = {'file': file}
+            response = requests.post('http://127.0.0.1:5000/api/attendance', request.form, files=request.files)
+            message = ""
+            if response.status_code == 400:
+                message = "Invalid request!"
+            elif response.status_code == 204:
+                message = f'Sorry! We couldn\'t identify you.'
+            elif response.status_code == 201:
+                message = f'Hey {response.json()["message"]}! You have successfuly been submited.'
             
-            img = file2RGB(file)
-            res = analyze(img)
-            if res:
-                x = models.addAttendance(lec_n, course_code, res.id)
-                if not x:
-                    return redirect('/error')
-                
-                flash(f'Hey {res.name}! You have successfuly been submited.')
-                return redirect('/')
-            else:
-                flash(f'Sorry! We couldn\'t identify you.')
-                return redirect('/')
+            flash(message)
+            return redirect('/')
         else:
             flash(f'No images were uploaded!')
             return redirect('/')

@@ -343,7 +343,7 @@ def getAttendance():
         
         attendance = {}
         attendance["id"] = attendace_obj.id
-        attendance["time"] = attendace_obj.time
+        attendance["time"] = str(attendace_obj.time)
         attendance["student"] = student.name
         attendance["course"] = course.name
         attendance["lecture_number"] = attendace_obj.lecture_number
