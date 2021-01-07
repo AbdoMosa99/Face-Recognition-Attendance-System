@@ -64,6 +64,7 @@
 ### Current Tasks
 * input validation with javascript
 * test and validate security
+* complete admin page (delete, navbar, insert)
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'
