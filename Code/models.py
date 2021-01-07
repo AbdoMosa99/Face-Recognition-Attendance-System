@@ -126,7 +126,7 @@ def addStudent(id, name, gender, email, university, faculty, courses, face_enc):
     db.session.commit()
     addLog(f"Student {name} with ID {id} was added Successfully")
     return student.id
-
+    
 def addFaculty(fac, uni):
     university = University.query.filter(University.name == uni).first()
     if not university:
@@ -315,6 +315,7 @@ def getDoctors():
         doctors.append(doctor)
         
     return doctors
+    
 def getCourses():
     course_objs = Course.query.all()
     courses = []

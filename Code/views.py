@@ -53,14 +53,16 @@ def register():
         courses = request.form['courses']
         file = request.files['uploadImg']
         
-        img = file2RGB(file)
-        enc = getEncoding(img)
-        courses = courses.split(',')
-        
-        s = models.addStudent(id, fullname, gender, email, university, faculty, courses, str(enc.tolist()))
-        if not s:
-            return redirect('/error')
-        return f"Student {fullname} Added Successfully"
+        files = {'file': file}
+        response = requests.post('http://127.0.0.1:5000/api/registration', request.form, files=request.files)
+        message = ""
+        if response.status_code == 400:
+            message = "Invalid request!"
+        elif response.status_code == 201:
+            message = f'Student {fullname} Added Successfully'
+            
+        flash(message)
+        return redirect('/')
     
     unis = models.University.query.all()
     facs = models.Faculty.query.all()

@@ -33,7 +33,29 @@ class Attendance(Resource):
         return {"message": "Bad Request"}, 400
     
 class Registration(Resource):
-    pass
+    def get(self):
+        students = models.getStudents()
+        return students
 
+    def post(self):
+        id = request.form["studentid"]
+        name = request.form["fullname"]
+        gender = request.form["gender"]
+        email = request.form["email"]
+        university = request.form["university"]
+        faculty = request.form["faculty"]
+        courses = request.form["courses"]
+        file = request.files['uploadImg']
+
+        img = face_recog.file2RGB(file)
+        enc = face_recog.getEncoding(img)
+        face_enc = str(enc.tolist())
+        courses = courses.split(',')
+
+        s = models.addStudent(id, name, gender, email, university, faculty, courses, face_enc)
+        if not s:
+            return {"message": "Bad Request"}, 400
+        return {"message": f"{s.name}"}, 201 
 
 api.add_resource(Attendance, '/api/attendance')
+api.add_resource(Registration, '/api/registration')
