@@ -19,11 +19,6 @@ def before_request():
 def index():
     if (request.method == 'POST'):
         if request.files:
-            course_code = request.form['courseCode']
-            lec_n = request.form['lectureNUM']
-            file = request.files["UploadImg"]
-            
-            files = {'file': file}
             response = requests.post('http://127.0.0.1:5000/api/attendance', request.form, files=request.files)
             message = ""
             if response.status_code == 400:
@@ -43,23 +38,14 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if (request.method == 'POST'):
-        id = request.form['studentid']
-        fullname = request.form['fullname'] 
-        gender = request.form['gender']
-        email = request.form['email'] 
-        university = request.form['university']
-        faculty = request.form['faculty']
-        courses = request.form['courses']
-        file = request.files['uploadImg']
-        
-        files = {'file': file}
+    if (request.method == 'POST'):      
         response = requests.post('http://127.0.0.1:5000/api/registration', request.form, files=request.files)
-        message = ""
-        if response.status_code == 400:
+        
+        message = ""    
+        if response.status_code == 201:
+            message = f'Student {response.json()["message"]} Added Successfully'
+        else:
             message = "Invalid request!"
-        elif response.status_code == 201:
-            message = f'Student {fullname} Added Successfully'
             
         flash(message)
         return redirect('/')

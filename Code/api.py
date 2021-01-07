@@ -55,7 +55,7 @@ class Registration(Resource):
         s = models.addStudent(id, name, gender, email, university, faculty, courses, face_enc)
         if not s:
             return {"message": "Bad Request"}, 400
-        return {"message": f"{s.name}"}, 201 
+        return {"message": f"{name}"}, 201 
 
 api.add_resource(Attendance, '/api/attendance')
 api.add_resource(Registration, '/api/registration')
