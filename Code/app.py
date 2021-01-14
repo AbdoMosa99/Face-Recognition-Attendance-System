@@ -15,5 +15,5 @@ from views import *
 from api import *
 
 if __name__ == '__main__':
-    app.run(DEBUG=True)
+    app.run(debug=True)
     
