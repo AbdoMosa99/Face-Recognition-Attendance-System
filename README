@@ -62,9 +62,18 @@
 
 
 ### Current Tasks
-* input validation with javascript
-* test and validate security
-* complete admin page (delete, navbar, insert)
+* Database
+* login and registration
+* form.html + message.html
+* full admin pannel + search 
+* Front End modifications
+* backend validation
+* frontend validation with js
+* testing all along
+
+* manytomany relationships should refer to the original objects themselves?
+* add Comments
+* manytoone relations? 
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'
@@ -72,6 +81,8 @@
 * run flask in debug mode 'set FLASK_ENV=development'
 * debugging numpy problem 'pip install numpy==1.19.3'
 * install all packages needed 'pip install -r requirements.txt'
+
+
 # create database
 from models import db
 db.create_all()
