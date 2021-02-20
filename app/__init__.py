@@ -10,10 +10,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB.db'
 db = SQLAlchemy(app)
 api = Api(app)
 
-from models import *
-from views import *
-from api import *
-
-if __name__ == '__main__':
-    app.run(debug=True)
-    
+from app import models
+from app import views
+from app import api

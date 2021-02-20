@@ -1,8 +1,8 @@
 from flask_restful import Resource, abort, reqparse
 from flask import request
 from app import api
-import models
-import face_recog
+from app import models
+from app import face_recog
 
 attendance_args = reqparse.RequestParser()
 attendance_args.add_argument("courseCode", type=str, required=True)

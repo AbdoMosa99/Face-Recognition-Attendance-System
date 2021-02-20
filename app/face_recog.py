@@ -3,7 +3,7 @@ import numpy as np
 import face_recognition
 from imutils.video import WebcamVideoStream
 from datetime import datetime
-from models import *
+from app import models
 
 
 def file2RGB(fileObj):
@@ -18,15 +18,15 @@ def getEncoding(img):
     return enc[0]
 
 def analyze(img):
-    unknown_enc = getEncoding(img)
-    encodings = FaceEncoding.query.all()
+    unknown_enc = models.getEncoding(img)
+    encodings = models.FaceEncoding.query.all()
     now = datetime.now()
     
     for encc in encodings:
         enc = np.array(eval(encc.encoding))
         result = face_recognition.compare_faces([enc], unknown_enc)
         if result[0] == True:
-            student = Student.query.filter(encc.id == Student.face_enc_id).first()
+            student = models.Student.query.filter(encc.id == models.Student.face_enc_id).first()
             if student:
                 return student
             return None
@@ -51,14 +51,14 @@ def predict(img, known_encs_objs):
             enc = np.array(eval(known_encs_obj.encoding))
             matches = face_recognition.compare_faces([enc], face_enc)
             if matches[0] == True:
-                student = Student.query.filter(known_encs_obj.id == Student.face_enc_id).first()
+                student = models.Student.query.filter(known_encs_obj.id == models.Student.face_enc_id).first()
                 if student:
                     y1, x2, y2, x1 = face_loc
                     y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
                     cv2.rectangle(img, (x1, y1), (x2, y1), (0, 255, 0), 2)
                     cv2.rectangle(img, (x1, y2-35), (x2, y2), (0, 255, 0), cv2.FILLED)
                     cv2.putText(img, student.name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                    addAttendance(1, "CS50", student.id)
+                    models.addAttendance(1, "CS50", student.id)
                     identified = True
                     break 
                                
@@ -67,7 +67,7 @@ def predict(img, known_encs_objs):
 
 def gen():
     stream = WebcamVideoStream(src=0).start()
-    known_encs = FaceEncoding.query.all()
+    known_encs = models.FaceEncoding.query.all()
     done = False
     
     while True:

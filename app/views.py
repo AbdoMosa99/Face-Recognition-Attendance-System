@@ -1,8 +1,7 @@
 from flask import render_template, redirect, url_for, session, request, g, flash, Response
 from argon2 import PasswordHasher
 from app import app
-import models
-from face_recog import *
+from app import models
 import requests
 
 
