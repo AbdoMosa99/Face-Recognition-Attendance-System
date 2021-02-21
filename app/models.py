@@ -26,9 +26,6 @@ class University(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     
-    faculties = db.relationship('UniversityFaculties', 
-                                backref='university', lazy=True)
-    
     def __repr__(self):
         return f'University {self.name} created'
 
@@ -36,9 +33,6 @@ class University(db.Model):
 class Faculty(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    
-    universities = db.relationship('UniversityFaculties', 
-                                   backref='faculty', lazy=True)
     
     def __repr__(self):
         return f'Faculty {self.name} created'
@@ -50,9 +44,8 @@ class UniversityFaculties(db.Model):
     university_id = db.Column(db.Integer, db.ForeignKey(University.id), nullable=False)
     faculty_id = db.Column(db.Integer, db.ForeignKey(Faculty.id), nullable=False)
     
-    courses = db.relationship('Course', backref='faculty', lazy=True)
-    doctors = db.relationship('Doctor', backref='faculty', lazy=True)
-    students = db.relationship('Student', backref='faculty', lazy=True)
+    university = db.relationship(University, backref="university_faculties")
+    faculty = db.relationship(Faculty, backref="university_faculties")
     
     def __repr__(self):
         return f'Faculty {self.faculty_id} added to University {self.university_id}'
@@ -65,11 +58,10 @@ class Doctor(db.Model):
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     
-    faculty_university_id = db.Column(db.Integer,
+    university_faculty_id = db.Column(db.Integer,
                                       db.ForeignKey(UniversityFaculties.id),
                                       nullable=False)
-    
-    courses = db.relationship('Course', backref='doctor', lazy=True)
+    university_faculty = db.relationship('UniversityFaculty', backref='doctors')
     
     def __repr__(self):
         return f'Doctor {self.name} added'   
@@ -83,12 +75,12 @@ class Course(db.Model):
     n_lectures = db.Column(db.Integer, nullable=False)
     
     doctor_id = db.Column(db.Integer, db.ForeignKey(Doctor.id), nullable=False)
-    faculty_university_id = db.Column(db.Integer,
+    doctor = db.relationship('Doctor', backref='courses')
+    
+    university_faculty_id = db.Column(db.Integer,
                                       db.ForeignKey(UniversityFaculties.id),
                                       nullable=False)
-    
-    students = db.relationship('StudentCourses', backref='course', lazy=True)
-    attendances = db.relationship('Attendance', backref='course', lazy=True)
+    university_faculty = db.relationship('UniversityFaculty', backref='courses')
 
     def __repr__(self):
         return f'Course {self.name} added for semester {self.semester}' 
@@ -100,9 +92,6 @@ class FaceEncoding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encoding = db.Column(db.PickleType, nullable=False)
     
-    student = db.relationship('Student', backref='face_encoding', 
-                              uselist=False, lazy=True)
-    
     def __repr__(self):
         return f'Encoding {self.id} created'
 
@@ -113,15 +102,15 @@ class Student(db.Model):
     email = db.Column(db.String(255), nullable=False)
     gender = db.Column(db.String(1), nullable=False)
 
-    faculty_university_id = db.Column(db.Integer,
+    university_faculty_id = db.Column(db.Integer,
                                       db.ForeignKey(UniversityFaculties.id),
                                       nullable=False)
+    university_faculty = db.relationship('UniversityFaculty', backref='students')
+    
     face_encoding_id = db.Column(db.Integer, 
                                  db.ForeignKey(FaceEncoding.id), 
                                  nullable=False)
-    
-    courses = db.relationship('StudentCourses', backref='student', lazy=True)
-    attendances = db.relationship('Attendance', backref='student', lazy=True)
+    face_encoding = db.relationship('FaceEncoding', backref='student', uselist=False)
     
     def __repr__(self):
         return f'Student {self.name} added'
@@ -130,8 +119,12 @@ class Student(db.Model):
 # Association Table for Student-Courses many-to-many relationship
 class StudentCourses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    
     student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
+    student = db.relationship('Student', backref='student_courses')
+    
     course_id = db.Column(db.Integer, db.ForeignKey(Course.id), nullable=False)
+    course = db.relationship('Course', backref='student_courses')
                             
     def __repr__(self):
         return f'Student {self.student_id} enrolled to course {self.course_id}' 
@@ -143,7 +136,10 @@ class Attendance(db.Model):
     lecture_number = db.Column(db.Integer, nullable=False)
     
     student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
+    student = db.relationship('Student', backref='attendances')
+    
     course_id = db.Column(db.Integer, db.ForeignKey(Course.id), nullable=False)
+    course = db.relationship('Course', backref='attendances')
                             
     def __repr__(self):
         return f'Student {self.student_id} attended course {self.course_id}' 

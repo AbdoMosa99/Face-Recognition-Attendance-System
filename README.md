@@ -72,8 +72,7 @@
 * testing all along
 
 * manytomany relationships should refer to the original objects themselves?
-* add Comments
-* manytoone relations? 
+* add Comments 
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'
