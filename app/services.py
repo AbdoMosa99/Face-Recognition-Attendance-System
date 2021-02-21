@@ -19,7 +19,7 @@ def reset_db():
     db.session.add(u1)
     db.session.add(u2)
     
-    fu1 = models.UniversityFaculties(university=u1, faculty=f1)
+    fu1 = models.UniversityFaculty(university=u1, faculty=f1)
     db.session.add(fu1)
     
     db.session.commit()

@@ -39,7 +39,7 @@ class Faculty(db.Model):
 
 
 # Association Table for university-faculty many-to-many relationship
-class UniversityFaculties(db.Model):
+class UniversityFaculty(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     university_id = db.Column(db.Integer, db.ForeignKey(University.id), nullable=False)
     faculty_id = db.Column(db.Integer, db.ForeignKey(Faculty.id), nullable=False)
@@ -59,7 +59,7 @@ class Doctor(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     
     university_faculty_id = db.Column(db.Integer,
-                                      db.ForeignKey(UniversityFaculties.id),
+                                      db.ForeignKey(UniversityFaculty.id),
                                       nullable=False)
     university_faculty = db.relationship('UniversityFaculty', backref='doctors')
     
@@ -78,7 +78,7 @@ class Course(db.Model):
     doctor = db.relationship('Doctor', backref='courses')
     
     university_faculty_id = db.Column(db.Integer,
-                                      db.ForeignKey(UniversityFaculties.id),
+                                      db.ForeignKey(UniversityFaculty.id),
                                       nullable=False)
     university_faculty = db.relationship('UniversityFaculty', backref='courses')
 
@@ -103,7 +103,7 @@ class Student(db.Model):
     gender = db.Column(db.String(1), nullable=False)
 
     university_faculty_id = db.Column(db.Integer,
-                                      db.ForeignKey(UniversityFaculties.id),
+                                      db.ForeignKey(UniversityFaculty.id),
                                       nullable=False)
     university_faculty = db.relationship('UniversityFaculty', backref='students')
     
@@ -117,7 +117,7 @@ class Student(db.Model):
 
 
 # Association Table for Student-Courses many-to-many relationship
-class StudentCourses(db.Model):
+class StudentCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
     student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
