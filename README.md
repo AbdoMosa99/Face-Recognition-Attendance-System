@@ -3,6 +3,7 @@
 ** face_recog (pickle encoding, face_recognition best, live feed)
 ** __repr__ in models
 ** use WTForm
+** encoding.student = list
 ** api
 ** database.py and services?
 ** flask admin (full, custom, search)
