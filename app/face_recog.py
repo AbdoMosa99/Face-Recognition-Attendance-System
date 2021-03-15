@@ -1,86 +1,98 @@
 import cv2
 import numpy as np
 import face_recognition
+import pickle
 from imutils.video import WebcamVideoStream
 from datetime import datetime
 from app import models
 
 
-def file2RGB(fileObj):
-    filestr = fileObj.read()
-    npimg = np.fromstring(filestr, np.uint8)
-    img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    return img
+class FaceRecognition():
     
-def getEncoding(img):
-    enc = face_recognition.face_encodings(img)
-    return enc[0]
+    def file2RGB(file):
+        """A function that convert uploaded file (jpg, png, etc.) to cv2 RGB image."""
+        filestr = file.read()
+        np_arr = np.fromstring(filestr, np.uint8)
+        img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        return rgb
 
-def analyze(img):
-    unknown_enc = models.getEncoding(img)
-    encodings = models.FaceEncoding.query.all()
-    now = datetime.now()
     
-    for encc in encodings:
-        enc = np.array(eval(encc.encoding))
-        result = face_recognition.compare_faces([enc], unknown_enc)
-        if result[0] == True:
-            student = models.Student.query.filter(encc.id == models.Student.face_enc_id).first()
-            if student:
-                return student
-            return None
-    return None
+    def get_encoding(img):
+        """A function that takes an RGB image,
+        and returns the face encoding of the first face in it."""
+        
+        encodings = face_recognition.face_encodings(img)
+        if not encodings:
+            raise Exception("No faces found in the image")
+            
+        return encodings[0]
 
-
-def getImage(stream):
-    image = stream.read()
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    return image
-
-def predict(img, known_encs_objs):
-    imgS = cv2.resize(img,(0,0),None,0.25,0.25)
-    face_locs = face_recognition.face_locations(imgS)
-    face_encs = face_recognition.face_encodings(imgS, face_locs)
-    identified = False
     
-    for (face_enc, face_loc) in zip(face_encs, face_locs):
-        if identified:
-            break
-        for known_encs_obj in known_encs_objs:
-            enc = np.array(eval(known_encs_obj.encoding))
-            matches = face_recognition.compare_faces([enc], face_enc)
-            if matches[0] == True:
-                student = models.Student.query.filter(known_encs_obj.id == models.Student.face_enc_id).first()
-                if student:
-                    y1, x2, y2, x1 = face_loc
-                    y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-                    cv2.rectangle(img, (x1, y1), (x2, y1), (0, 255, 0), 2)
-                    cv2.rectangle(img, (x1, y2-35), (x2, y2), (0, 255, 0), cv2.FILLED)
-                    cv2.putText(img, student.name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                    models.addAttendance(1, "CS50", student.id)
-                    identified = True
-                    break 
-                               
-    return identified, img
-    
+    def process_image(img):
+        """A function that takes an RGB image,
+        and returns the students in it with their face locations."""
+        recognized_students = []
+        
+        face_locations = face_recognition.face_locations(img)
+        unknown_encodings = face_recognition.face_encodings(img, face_locations)
 
-def gen():
-    stream = WebcamVideoStream(src=0).start()
-    known_encs = models.FaceEncoding.query.all()
-    done = False
+        known_encodings_db = models.FaceEncoding.query.all()
+        known_encodings = list(map(
+            lambda enc: pickle.loads(enc.encoding),
+            known_encodings_db))
+        
+        for unknown_encoding in unknown_encodings:
+            matches = face_recognition.compare_faces(known_encodings, unknown_encoding)
+
+            if True in matches:
+                first_match_index = matches.index(True)               
+                recognized_students.append({
+                    "student": known_encodings_db[first_match_index].student,
+                    "location": face_locations[first_match_index]
+                })
+
+        return recognized_students
     
-    while True:
-        if done:
-            stream.stop()
-            return "Success"
-        image = getImage(stream)
-        res, image = predict(image, known_encs)
-        if res:
-            done = True
-        ret, jpeg = cv2.imencode('.jpg', image)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+    
+    def represent_image(img, recognized_students):
+        """A function that takes a frame from the video or live camera,
+        And processes it to get """
+        
+        for recognized_student in recognized_students:
+            top, right, bottom, left = recognized_student["location"]
+            cv2.rectangle(img, (left, top), (right, bottom), (0, 0, 255), 2)
+            
+            cv2.rectangle(img, (left, bottom - 35), (right, bottom),
+                          (0, 0, 255), cv2.FILLED)
+            cv2.putText(img, recognized_student["student"].name, 
+                        (left + 6, right - 6), cv2.FONT_HERSHEY_DUPLEX,
+                        1.0, (255, 255, 255), 1)
+
+        return img
+
+
+class StreamProcessing():
+    stream = None
+    running = False
+    
+    def get_frame(stream):
+        image = stream.read()
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        return image
+
+    def gen():
+        stream = WebcamVideoStream(src=0).start()
+        known_encs = models.FaceEncoding.query.all()
+
+        while True:
+            frame = stream.read()
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            recognized_students = FaceRecognition.process_image(frame)
+            out_frame = FaceRecognition.represent_image(frame, recognized_students)
+            ret, jpeg = cv2.imencode('.jpg', out_frame)
+            out_frame = jpeg.tobytes()
+            yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + out_frame + b'\r\n\r\n')
 
         

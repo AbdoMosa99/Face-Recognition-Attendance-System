@@ -42,9 +42,9 @@ class Faculty(db.Model):
 class UniversityFaculty(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     university_id = db.Column(db.Integer, db.ForeignKey(University.id), nullable=False)
-    faculty_id = db.Column(db.Integer, db.ForeignKey(Faculty.id), nullable=False)
-    
     university = db.relationship(University, backref="university_faculties")
+    
+    faculty_id = db.Column(db.Integer, db.ForeignKey(Faculty.id), nullable=False)
     faculty = db.relationship(Faculty, backref="university_faculties")
     
     def __repr__(self):
