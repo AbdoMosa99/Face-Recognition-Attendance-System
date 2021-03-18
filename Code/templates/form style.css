@@ -1,0 +1,44 @@
+
+form
+{
+  text-align: center;
+  padding-top: 50px;
+}
+form label 
+{
+	font-family: sans-serif;
+	font-size: 25px;
+}
+form input
+{
+  padding: 15px;
+  width: 300px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+input
+{
+margin-bottom: 30px;
+}
+form button
+{
+  background-color: #327ba8;
+  border: none;
+  color: white;
+  padding: 15px;
+  width: 150px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+select
+{
+  padding: 15px;
+  width: 300px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
