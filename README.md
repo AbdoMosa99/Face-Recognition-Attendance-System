@@ -2,17 +2,16 @@
 * Refactoring
 ** flask admin (full, custom, search) -
 ** use WTForm -
-** file names
-** add CameraStream API
-* Front end
+** bonus (recoreded video)
 ** redesign
 ** JS validation
 ** JS with API
-* testing
+** testing
 * Finalize
 ** video
 ** presentation
 ** release -
+** final revise
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'

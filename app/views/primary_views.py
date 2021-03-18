@@ -6,8 +6,14 @@ from app.forms import AttendanceForm, RegistrationForm
 
 
 # Home Route
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
+    return render_template("index.html")
+
+
+# Attendance Route
+@app.route("/attendance", methods=["GET", "POST"])
+def attend():
     form = AttendanceForm()
     
     # For Post Request: Submitting an attendance
@@ -20,7 +26,7 @@ def index():
         return redirect(url_for("/", form=form))
     
     # For Get Request: Opening home page
-    return render_template("index.html", form=form)
+    return render_template("attendance.html", form=form)
 
 
 # Registration Route
@@ -39,12 +45,16 @@ def register():
     
     # For Get Request: Opening registration form
     universities = models.University.query.all()
-    universities_list = [(u.id, u.name) for u in universities]
-    form.university_id.choices = universities_list
+    universities_list = [(u.name, u.name) for u in universities]
+    form.university_name.choices = universities_list
     
     faculties = models.Faculty.query.all()
-    faculties_list = [(f.id, f.name) for f in faculties]
-    form.faculty_id.choices = faculties_list
+    faculties_list = [(f.name, f.name) for f in faculties]
+    form.faculty_name.choices = faculties_list
     
     return render_template("register.html", form=form)
 
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")

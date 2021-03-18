@@ -8,10 +8,10 @@
 <script src="../static/js/bootstrap-validate.js"></script>
     <div class="topnav">
           <a href="/">Home</a>
-          <a href="/">Attendence</a>
+          <a href="/attendance">Attendence</a>
           <a class="active" href="/register">Register</a>
           <a href="/admin">Admin</a>
-          <a href="/">Contact Us</a>
+          <a href="/contact">Contact Us</a>
     </div>
     <div class="alert alert-warning" role="alert">
             {% for field, errors in form.errors.items() %}
@@ -22,7 +22,7 @@
             {% endfor %}
     </div>
     <div class=features>
-            <form action='/' method='POST' enctype='multipart/form-data' class="form-group">
+            <form action='/register' method='POST' enctype='multipart/form-data' class="form-group">
                 {{ form.csrf_token() }}
                 <div class="form-group">
                     {{ form.full_name.label }}
@@ -59,7 +59,7 @@
                  </div>
                  <br>
                     <button class="btn btn-primary"id="reset" type="button" onclick="resetFun()">Reset</button><br>
-                    <button class="btn btn-primary"id="register" type="submit" onclick="validateForm()">Register</button><br>
+                    <button class="btn btn-primary" id="register" type="submit">Register</button><br>
 
             </form>
     </div>

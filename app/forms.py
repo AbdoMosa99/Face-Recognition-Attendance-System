@@ -39,15 +39,12 @@ class RegistrationForm(FlaskForm):
                                      Regexp(regex = "^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$")],
                        render_kw = {"placeholder": "mikeSmith@example.com"})
     
-    university_id = SelectField(label = "University",
-                        validators = [DataRequired()])
+    university_name = SelectField(label = "University", validators = [DataRequired()])
     
-    faculty_id = SelectField(label = "Faculty",
-                               validators = [DataRequired()])
+    faculty_name = SelectField(label = "Faculty", validators = [DataRequired()])
     
     courses_codes = StringField(label = "Courses",
-                       validators = [DataRequired(), 
-                                     Regexp(regex = "^(\w+)(,\w+)*$")],
+                       validators = [DataRequired(), Regexp(regex = "^(\w+)(,\w+)*$")],
                        render_kw = {"placeholder": "SE301,CS381,CS352"})
     
     uploaded_file = FileField(label = "Face Image",

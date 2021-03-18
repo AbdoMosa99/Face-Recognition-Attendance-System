@@ -70,8 +70,8 @@ class Registration(Resource):
             # get his faculty and university object from db 
             # and raise exception if not found
             university_faculty = models.UniversityFaculty.query.filter(
-                models.Faculty.id == form.faculty_id 
-                and models.University.id == form.university_id).one()
+                models.Faculty.name == form.faculty_name 
+                and models.University.name == form.university_name).one()
             
             # create a db face encoding object
             face_encoding = models.FaceEncoding(encoding = encoding_db)
