@@ -1,13 +1,9 @@
-from flask_restful import Resource, abort, reqparse
+from flask_restful import Resource, abort
 from flask import request
 from app import db, api, models
 from app.face_recog import FaceRecognition
+from app.forms import AttendanceForm, RegistrationForm
 import pickle
-
-# make a request parser for attendance to validate arguments
-attendance_args = reqparse.RequestParser()
-attendance_args.add_argument("courseCode", type=str, required=True)
-attendance_args.add_argument("lectureNUM", type=int, required=True)
 
 
 # An attendace API that handles taking the attendance by images 
@@ -18,20 +14,16 @@ class Attendance(Resource):
     
     def post(self):
         try:
-            # validate request arguments
-            args = attendance_args.parse_args()
-            
-            # take form data into variables
-            course_code = request.form["courseCode"]
-            lecture_number = request.form["lectureNUM"]
-            file = request.files["UploadImg"]
+            form = AttendanceForm()
+            if not form.validate():
+                raise Exception("Invalid Form")
             
             # get the course object from the given course code,
             # and raise exception if the course code is invalid
-            course = models.Course.query.filter(models.Course.code == course_code).one()
+            course = models.Course.query.filter(models.Course.code == form.course_code).one()
             
             # get students in the image from db through face recognition
-            img = FaceRecognition.file2RGB(file)
+            img = FaceRecognition.file2RGB(form.uploaded_file)
             known_encodings_db = models.FaceEncoding.query.all()
             recognized_students = FaceRecognition.process_image(img, known_encodings_db)
             if not recognized_students:
@@ -39,7 +31,7 @@ class Attendance(Resource):
             
             # mark their attendance in the database
             for recognized_student in recognized_students:
-                attendance = models.Attendance(lecture_number = lecture_number,
+                attendance = models.Attendance(lecture_number = form.lecture_number,
                                                student = recognized_student["student"],
                                                course = course)
                 db.session.add(attendance)
@@ -62,18 +54,14 @@ class Registration(Resource):
 
     def post(self):
         try:
-            # take form data into variables
-            id = request.form["studentid"]
-            name = request.form["fullname"]
-            gender = request.form["gender"]
-            email = request.form["email"]
-            university_name = request.form["university"]
-            faculty_name = request.form["faculty"]
-            course_codes = request.form["courses"].split(",")
-            file = request.files["uploadImg"]
+            form = RegistrationForm()
+            if not form.validate():
+                raise Exception("Invalid Form")
+                
+            course_codes = form.course_codes.split(",")
             
             # get student face encoding
-            img = FaceRecognition.file2RGB(file)
+            img = FaceRecognition.file2RGB(form.uploaded_file)
             encoding = FaceRecognition.get_encoding(img)
             
             # convert their face encoding into a pickle type for the db
@@ -82,8 +70,8 @@ class Registration(Resource):
             # get his faculty and university object from db 
             # and raise exception if not found
             university_faculty = models.UniversityFaculty.query.filter(
-                models.Faculty.name == faculty_name 
-                and models.University.name == models.University.name).one()
+                models.Faculty.id == form.faculty_id 
+                and models.University.id == form.university_id).one()
             
             # create a db face encoding object
             face_encoding = models.FaceEncoding(encoding = encoding_db)
@@ -93,7 +81,8 @@ class Registration(Resource):
                        for course_code in course_codes]
             
             # make the student object with all their information and add into the database
-            student = models.Student(id = id, name = name, gender = gender, email = email,
+            student = models.Student(id = form.student_id, name = form.full_name,
+                                     gender = form.gender, email = form.email,
                                      university_faculty = university_faculty,
                                      face_encoding = face_encoding)
             db.session.add(student)

@@ -21,7 +21,7 @@ class AttendanceForm(FlaskForm):
     
 
     
-class RegisterForm(FlaskForm):
+class RegistrationForm(FlaskForm):
     full_name = StringField(label = "Full Name",
                             validators = [DataRequired(), Length(max=100)],
                             render_kw = {"placeholder": "Mike Smith"})
@@ -39,10 +39,10 @@ class RegisterForm(FlaskForm):
                                      Regexp(regex = "^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$")],
                        render_kw = {"placeholder": "mikeSmith@example.com"})
     
-    university_name = SelectField(label = "University",
+    university_id = SelectField(label = "University",
                         validators = [DataRequired()])
     
-    faculty_name = SelectField(label = "Faculty",
+    faculty_id = SelectField(label = "Faculty",
                                validators = [DataRequired()])
     
     courses_codes = StringField(label = "Courses",
