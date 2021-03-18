@@ -3,6 +3,7 @@ from flask import session, redirect, url_for, render_template, request, flash
 from app import models, bcrypt
 from app.forms import LoginForm
 
+
 class MyAdminIndexView(AdminIndexView):
 
     @expose('/')

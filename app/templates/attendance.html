@@ -12,38 +12,55 @@
           <a href="/admin">Admin</a>
           <a href="/contact">Contact Us</a>
     </div>
-
-        <h1 id="title">Face Recognition Attendence System</h1>
-
-        <div class="alert alert-warning" role="alert">
-            {% for field, errors in form.errors.items() %}
-                {% for error in errors %}
-                    {{ error }}
-                    <br>
+    
+        <div class="container">
+            <h1 id="title" class="text-center my-5">Face Recognition Attendence System </h1>
+            {% if form.errors.items() %}
+                {% for field, errors in form.errors.items() %}
+                    {% for error in errors %}
+                        <div class="alert alert-warning" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-        </div>
-        
-        <div class=features>
-            <form action='/attendance' method='POST' enctype='multipart/form-data' class="form-group">
-                {{ form.csrf_token() }}
-                <div class="form-group">
-                    {{ form.course_code.label }}
-                    {{ form.course_code() }}
-                </div>
-                <div class="form-group">
-                    {{ form.lecture_number.label }}
-                    {{ form.lecture_number() }}
-                </div>
-                <br>
-                <div class="form-group">
-                    {{ form.uploaded_file.label }}
-                    {{ form.uploaded_file() }}
-                </div>
-                <br>
-                <button id="submit_attend" type="submit" class="btn btn-primary">Submit</button>
-                <br>
-                <a  href='/camfeed' id='opencamera' type="button" class="btn btn-primary">Open Camera</a>
-            </form>
+            {% endif %}
+            <div class="features px-md-5 mx-md-5">
+                <form action='/' method='POST' enctype='multipart/form-data'>
+                    {{ form.csrf_token() }}
+                    <div class="form-group row mb-3">
+                        {{ form.course_code.label(class_="col-sm-2 col-form-label h4") }}
+                        <div class="col-sm-10">
+                            {{ form.course_code(class_="form-control form-control-lg") }}
+                        </div> 
+                    </div>
+                    
+                    <div class="form-group row mb-3">
+                        {{ form.lecture_number.label(class_="col-sm-2 col-form-label h4") }}
+                        <div class="col-sm-10">
+                            {{ form.lecture_number(class_="form-control form-control-lg") }}
+                        </div> 
+                    </div>
+                    <div class="form-group row mb-3">
+                        {{ form.uploaded_file.label(class_="col-sm-2 col-form-label h4") }}
+                        <div class="col-sm-10">
+                            {{ form.uploaded_file(class_="form-control form-control-lg") }}
+                        </div> 
+                    </div>
+                    
+                    <div class="form-group justify-content-center my-5 row">
+                        <button id="submit_attend" type="submit" class="btn btn-lg btn-primary w-100 btn-center">Submit</button>
+                        <p class="d-inline lead my-auto py-0 text-muted px-3 or"> or </p>
+                        <a href='/camfeed' id='opencamera' type="button" class="btn btn-lg btn-primary w-100 btn-center">Open Camera</a>
+                     
+                    </div>
+                    
+                </form>
+            </div>
+            {% with messages = get_flashed_messages() %}
+                {% for message in messages %}
+                    <br>
+                    <div class="text-center">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
         </div>
  {% endblock %}

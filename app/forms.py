@@ -9,26 +9,30 @@ from werkzeug.utils import secure_filename
 class AttendanceForm(FlaskForm):
     course_code = StringField(label = "Course Code",
                               validators = [DataRequired(), Length(max=10)],
-                              render_kw = {"placeholder": "CS101"})
+                              render_kw = {"placeholder": "CS101", "maxlength": "10",
+                                          "pattern": "^[A-Z]{2}\d{3}$"})
     
     lecture_number = IntegerField(label = "Lecture Number",
                                   validators = [DataRequired(), NumberRange(min=1, max=30)],
-                                  render_kw = {"placeholder": "2"})
+                                  render_kw = {"placeholder": "2", "maxlength": "2",
+                                               "pattern": "^\d+$"})
     
     uploaded_file = FileField(label = "Face Image",
                               validators=[FileRequired(), 
-                                          FileAllowed(['jpg', 'png'], 'Images only!')])
+                                          FileAllowed(['jpg', 'png'], 'Images only!')],
+                             render_kw = {"accept": "image/png, image/jpeg"})
     
 
     
 class RegistrationForm(FlaskForm):
     full_name = StringField(label = "Full Name",
                             validators = [DataRequired(), Length(max=100)],
-                            render_kw = {"placeholder": "Mike Smith"})
+                            render_kw = {"placeholder": "Mike Smith",
+                                        "pattern": "^(\w+)(\s\w+)*$"})
     
     student_id = IntegerField(label = "Student ID",
                               validators = [DataRequired(), NumberRange(min=1)],
-                              render_kw = {"placeholder": "151072"})
+                              render_kw = {"placeholder": "151072", "pattern": "^\d+$"})
     
     gender = SelectField(label = "Gender",
                         validators = [DataRequired()],
@@ -45,15 +49,19 @@ class RegistrationForm(FlaskForm):
     
     courses_codes = StringField(label = "Courses",
                        validators = [DataRequired(), Regexp(regex = "^(\w+)(,\w+)*$")],
-                       render_kw = {"placeholder": "SE301,CS381,CS352"})
+                       render_kw = {"placeholder": "SE301,CS381,CS352",
+                                   "pattern": "^(\w+)(,\w+)*$"})
     
     uploaded_file = FileField(label = "Face Image",
                               validators = [FileRequired(), 
-                                            FileAllowed(['jpg', 'png'], 'Images only!')])
+                                            FileAllowed(['jpg', 'png'], 'Images only!')],
+                             render_kw = {"accept": "image/png, image/jpeg"})
+    
     
 class LoginForm(FlaskForm):
     username = StringField(label= "Username",
-                           validators=[DataRequired(), Length(max=255)])
+                           validators=[DataRequired(), Length(max=255)],
+                          render_kw = {"pattern": "^(?=.{4,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$"})
     
     password = PasswordField(label=('Password'),
                              validators=[DataRequired(), Length(min=8, max=255)])

@@ -15,16 +15,12 @@
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap2/swatch/{swatch}/bootstrap.min.css'.format(swatch=config.get('FLASK_ADMIN_SWATCH', 'default')), v='2.3.2') }}" rel="stylesheet">
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap2/css/bootstrap-responsive.css', v='2.3.2') }}" rel="stylesheet">
         <link href="{{ admin_static.url(filename='admin/css/bootstrap2/admin.css', v='1.1.1') }}" rel="stylesheet">
+        <link rel="stylesheet" href="../../static/css/style.css">
         {% if admin_view.extra_css %}
           {% for css_url in admin_view.extra_css %}
             <link href="{{ css_url }}" rel="stylesheet">
           {% endfor %}
         {% endif %}
-        <style>
-        body {
-            padding-top: 4px;
-        }
-        </style>
     {% endblock %}
     {% block head %}
     {% endblock %}
@@ -33,6 +29,13 @@
   </head>
   <body>
     {% block page_body %}
+    <div class="topnav">
+          <a href="/">Home</a>
+          <a href="/attendance">Attendence</a>
+          <a href="/register">Register</a>
+          <a class="active" href="/admin">Admin</a>
+          <a href="/contact">Contact Us</a>
+    </div>
     <div class="container{%if config.get('FLASK_ADMIN_FLUID_LAYOUT', False) %}-fluid{% endif %}">
       <div class="navbar">
         <div class="navbar-inner">
@@ -41,9 +44,6 @@
           {% endblock %}
           {% block main_menu %}
           <ul class="nav">
-              <li>
-                <a href="/">test</a>
-                </li>
             {{ layout.menu() }}
           </ul>
           {% endblock %}

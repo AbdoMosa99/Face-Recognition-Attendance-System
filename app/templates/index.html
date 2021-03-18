@@ -13,19 +13,17 @@
           <a href="/admin">Admin</a>
           <a href="/contact">Contact Us</a>
     </div>
-    <div style="background-image: url('facRec.jpg');">
-      <p>
-        With this web site you can make yor attendence system !
-        Rigester attendees information then you can take attendence
-        with face recognition technology.
+    <div class="wall">
+        <div class="shadow"></div>
+        <div class="container py-5 top">
+            <h1 class="h1 text-white text-center"> Face Recognition Attendence System </h1>
+            <h3 class="h3 text-white text-center py-4 intro">
+                With this web site you can make yor attendence system !
+                Rigester attendees information then you can take attendence
+                with face recognition technology.
 
-      </p>
-
+            </h3>
+        </div>
     </div>
-            {% with messages = get_flashed_messages() %}
-            {% for message in messages %}
-                <br>
-                <div class="text-center">{{ message }}</div>
-            {% endfor %}
-        {% endwith %}
+    
 {% endblock %}

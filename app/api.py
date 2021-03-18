@@ -1,6 +1,6 @@
 from flask_restful import Resource, abort
 from flask import request
-from app import db, api, models
+from app import db, models
 from app.face_recog import FaceRecognition
 from app.forms import AttendanceForm, RegistrationForm
 import pickle
@@ -25,13 +25,12 @@ class Attendance(Resource):
             known_encodings_db = models.FaceEncoding.query.all()
             recognized_students = FaceRecognition.process_image(img, known_encodings_db)
             if not recognized_students:
-                return {"message": "Sorry! We couldn't identify anyone."}, 204
+                return {"message": "Sorry! We couldn't identify anyone."}
             
             # mark their attendance in the database
             for recognized_student in recognized_students:
                 attendance = models.Attendance(lecture_number = form.lecture_number.data,
                                                student = recognized_student["student"],
-                                               student_id = recognized_student["student"].id, # delete
                                                course = course)
                 db.session.add(attendance)
             

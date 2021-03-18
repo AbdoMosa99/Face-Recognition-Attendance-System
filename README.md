@@ -1,13 +1,10 @@
 ### Current Tasks
 * Refactoring
-** flask admin (full, custom, search) -
-** use WTForm -
-** bonus (recoreded video)
 ** redesign
-** JS validation
-** JS with API
 ** testing
 ** logs
+** bonus (recoreded video)
+** JS with API (cancled)
 * Finalize
 ** video
 ** presentation

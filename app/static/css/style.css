@@ -28,28 +28,122 @@
 }
 #title
 {
-text-align: center;
 font-family: Sans-serif;
-margin-top: 50px;
 }
-.features
-{
-  text-align: center;
+
+
+.col-form-label { 
+    
+    font-size: 20px;
+    
 }
-.features button
-{
-  background-color: #327ba8;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+
+.or {
+    text-align: center;
+    width: 55px;
+    font-size: 16px;
 }
-.features input
-{
-  padding: 15px 32px;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+
+.or:before {
+    content: "";
+    display:block;
+    width: 2px;
+    height: 12px;
+    margin: 0 auto;
+    background: #6c757d;
+}
+
+.or:after {
+    content: "";
+    display:block;
+    width: 2px;
+    height: 12px;
+    margin: 0 auto;
+    background: #6c757d;
+}
+    
+
+.btn-center {
+    width:180px !important;
+}
+
+.wall {
+    background-image : url("../images/facRec.jpg");
+    height: calc(100vh - 53px);
+    background-size: cover;
+    position : relative;
+    
+}
+
+
+.shadow {
+    position: absolute;
+    width : 100%;
+    height: 100%;
+    background: rgba(0,0,0,.4);
+    top:0;
+    left:0;
+    z-index: 13;
+}
+
+.top {
+    z-index: 500;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.intro {
+    line-height: 1.7;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Rubik:500,700|Roboto:400,600");
+.section-padding {
+    padding: 45px 0;
+}
+.section-dark {
+    background-color: #f9f9f9;
+    z-index: -2;
+}
+
+.help-block {
+    margin-top: 0;
+    font-size: 12px
+}
+
+.contact-widget-section .single-contact-widget {
+    background: #f9f9f9;
+    padding: 20px 25px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.26);
+    height: 260px;
+    margin-top: 25px;
+    transition: all 0.3s ease-in-out
+}
+
+.contact-widget-section .single-contact-widget i {
+    font-size: 75px
+}
+
+.contact-widget-section .single-contact-widget h3 {
+    font-size: 20px;
+    color: #333;
+    font-weight: 700;
+    padding-bottom: 10px
+}
+
+.contact-widget-section .single-contact-widget p {
+    line-height: 16px
+}
+
+.contact-widget-section .single-contact-widget:hover {
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.46);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out
+}
+
+
+.map {
+  background-image : url("../images/facRec.jpg");
+  background-size: cover
 }
