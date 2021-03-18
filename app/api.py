@@ -15,15 +15,13 @@ class Attendance(Resource):
     def post(self):
         try:
             form = AttendanceForm()
-            if not form.validate():
-                raise Exception("Invalid Form")
-            
+
             # get the course object from the given course code,
             # and raise exception if the course code is invalid
-            course = models.Course.query.filter(models.Course.code == form.course_code).one()
+            course = models.Course.query.filter(models.Course.code == form.course_code.data).one()
             
             # get students in the image from db through face recognition
-            img = FaceRecognition.file2RGB(form.uploaded_file)
+            img = FaceRecognition.file2RGB(form.uploaded_file.data)
             known_encodings_db = models.FaceEncoding.query.all()
             recognized_students = FaceRecognition.process_image(img, known_encodings_db)
             if not recognized_students:
@@ -31,8 +29,9 @@ class Attendance(Resource):
             
             # mark their attendance in the database
             for recognized_student in recognized_students:
-                attendance = models.Attendance(lecture_number = form.lecture_number,
+                attendance = models.Attendance(lecture_number = form.lecture_number.data,
                                                student = recognized_student["student"],
+                                               student_id = recognized_student["student"].id, # delete
                                                course = course)
                 db.session.add(attendance)
             
@@ -41,7 +40,8 @@ class Attendance(Resource):
             names = [student["student"].name for student in recognized_students]
             return {"message": f"Hey {names}! You have been successfuly submited."}, 201
         
-        except:
+        except Exception as e:
+            print(e)
             return {"message": "Invalid request!"}, 400
 
 
@@ -55,13 +55,11 @@ class Registration(Resource):
     def post(self):
         try:
             form = RegistrationForm()
-            if not form.validate():
-                raise Exception("Invalid Form")
-                
-            course_codes = form.course_codes.split(",")
+               
+            course_codes = form.courses_codes.data.split(",")
             
             # get student face encoding
-            img = FaceRecognition.file2RGB(form.uploaded_file)
+            img = FaceRecognition.file2RGB(form.uploaded_file.data)
             encoding = FaceRecognition.get_encoding(img)
             
             # convert their face encoding into a pickle type for the db
@@ -70,8 +68,8 @@ class Registration(Resource):
             # get his faculty and university object from db 
             # and raise exception if not found
             university_faculty = models.UniversityFaculty.query.filter(
-                models.Faculty.name == form.faculty_name 
-                and models.University.name == form.university_name).one()
+                models.Faculty.name == form.faculty_name.data 
+                and models.University.name == form.university_name.data).one()
             
             # create a db face encoding object
             face_encoding = models.FaceEncoding(encoding = encoding_db)
@@ -81,16 +79,17 @@ class Registration(Resource):
                        for course_code in course_codes]
             
             # make the student object with all their information and add into the database
-            student = models.Student(id = form.student_id, name = form.full_name,
-                                     gender = form.gender, email = form.email,
+            student = models.Student(id = form.student_id.data, name = form.full_name.data,
+                                     gender = form.gender.data, email = form.email.data,
                                      university_faculty = university_faculty,
                                      face_encoding = face_encoding)
             db.session.add(student)
             
             # commit and return a success message
             db.session.commit()
-            return {"message": f"Student {name} Added Successfully"}, 201
+            return {"message": f"Student {form.full_name.data} Added Successfully"}, 201
             
-        except:
+        except Exception as e:
+            print(e)
             return {"message": "Invalid request!"}, 400
          

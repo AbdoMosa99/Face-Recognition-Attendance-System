@@ -25,7 +25,7 @@
         </div>
         
         <div class=features>
-            <form action='/' method='POST' enctype='multipart/form-data' class="form-group">
+            <form action='/attendance' method='POST' enctype='multipart/form-data' class="form-group">
                 {{ form.csrf_token() }}
                 <div class="form-group">
                     {{ form.course_code.label }}
@@ -46,10 +46,4 @@
                 <a  href='/camfeed' id='opencamera' type="button" class="btn btn-primary">Open Camera</a>
             </form>
         </div>
-        {% with messages = get_flashed_messages() %}
-            {% for message in messages %}
-                <br>
-                <div class="text-center">{{ message }}</div>
-            {% endfor %}
-        {% endwith %}
  {% endblock %}

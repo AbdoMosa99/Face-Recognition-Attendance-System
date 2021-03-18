@@ -23,7 +23,7 @@ def attend():
                                  request.form, files=request.files)
 
         flash(response.json()["message"])  
-        return redirect(url_for("/", form=form))
+        return redirect("/")
     
     # For Get Request: Opening home page
     return render_template("attendance.html", form=form)
@@ -34,6 +34,14 @@ def attend():
 def register():
     form = RegistrationForm()
     
+    universities = models.University.query.all()
+    universities_list = [(u.name, u.name) for u in universities]
+    form.university_name.choices = universities_list
+    
+    faculties = models.Faculty.query.all()
+    faculties_list = [(f.name, f.name) for f in faculties]
+    form.faculty_name.choices = faculties_list
+    
     # For Post Request: Submitting the registration form
     if request.method == "POST" and form.validate():
         # using the registration API 
@@ -43,15 +51,8 @@ def register():
         flash(response.json()["message"])
         return redirect('/')
     
+
     # For Get Request: Opening registration form
-    universities = models.University.query.all()
-    universities_list = [(u.name, u.name) for u in universities]
-    form.university_name.choices = universities_list
-    
-    faculties = models.Faculty.query.all()
-    faculties_list = [(f.name, f.name) for f in faculties]
-    form.faculty_name.choices = faculties_list
-    
     return render_template("register.html", form=form)
 
 

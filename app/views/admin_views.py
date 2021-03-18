@@ -1,6 +1,7 @@
 from flask_admin import AdminIndexView, expose
 from flask import session, redirect, url_for, render_template, request, flash
 from app import models, bcrypt
+from app.forms import LoginForm
 
 class MyAdminIndexView(AdminIndexView):
 
@@ -15,8 +16,10 @@ class MyAdminIndexView(AdminIndexView):
     
     @expose('/login', methods=('GET', 'POST'))
     def login_view(self):
+        form = LoginForm()
+        
         # For Post Request: Submitting the login form
-        if request.method == "POST":
+        if request.method == "POST" and form.validate():
             try:
                 username = request.form["username"]
                 password = request.form["password"]
@@ -36,7 +39,7 @@ class MyAdminIndexView(AdminIndexView):
                 return redirect(url_for('.login_view'))
 
         # For Get Request: Opening login form
-        return render_template("admin/login.html")
+        return render_template("admin/login.html", form=form)
 
 
     @expose('/logout/')

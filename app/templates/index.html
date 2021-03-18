@@ -22,5 +22,10 @@
       </p>
 
     </div>
-    
+            {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <br>
+                <div class="text-center">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
 {% endblock %}

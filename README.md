@@ -7,6 +7,7 @@
 ** JS validation
 ** JS with API
 ** testing
+** logs
 * Finalize
 ** video
 ** presentation
