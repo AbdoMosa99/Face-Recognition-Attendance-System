@@ -40,5 +40,10 @@ def add_admin(username, password):
     db.session.add(admin)
     db.session.commit()
     
-    
+def add_log(log_message):
+    from app import db
+    from app.models import Log
+    log = Log(activity = log_message)
+    db.session.add(log)
+    db.session.commit()
     

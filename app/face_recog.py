@@ -42,14 +42,15 @@ class FaceRecognition():
         # for all encodings in the image,
         # get the matches of students if exists in the db
         recognized_students = []
-        for unknown_encoding in unknown_encodings:
+        for i in range(len(unknown_encodings)):
+            unknown_encoding = unknown_encodings[i]
             matches = face_recognition.compare_faces(known_encodings, unknown_encoding)
 
             if True in matches:
                 first_match_index = matches.index(True)               
                 recognized_students.append({
                     "student": known_encodings_db[first_match_index].student,
-                    "location": face_locations[first_match_index]
+                    "location": face_locations[i]
                 })
 
         return recognized_students

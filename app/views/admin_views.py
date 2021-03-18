@@ -2,6 +2,7 @@ from flask_admin import AdminIndexView, expose
 from flask import session, redirect, url_for, render_template, request, flash
 from app import models, bcrypt
 from app.forms import LoginForm
+from app.services import add_log
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -31,11 +32,13 @@ class MyAdminIndexView(AdminIndexView):
                 # check credentials
                 authenticated = bcrypt.check_password_hash(user.password_hash, password)
                 if not authenticated:
-                    raise Exception("Wrong Password")
+                    raise Exception(f"Wrong Password From <{username}>")
                     
                 session["username"] = username # keep logged in
+                add_log(f"{username} has successfully logged in.")
                 return redirect(url_for(".index"))
             except:
+                add_log(f"There has been a failed attempt of login with the exception {e}.")
                 flash("Wrong username or password!")
                 return redirect(url_for('.login_view'))
 
@@ -45,6 +48,7 @@ class MyAdminIndexView(AdminIndexView):
 
     @expose('/logout/')
     def logout_view(self):
+        add_log(f"{session['username']} has successfully logged out.")
         session.pop('username', None)
         return redirect(url_for('index'))
 
