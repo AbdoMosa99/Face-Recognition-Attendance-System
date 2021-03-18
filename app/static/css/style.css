@@ -102,7 +102,6 @@ font-family: Sans-serif;
     padding: 45px 0;
 }
 .section-dark {
-    background-color: #f9f9f9;
     z-index: -2;
 }
 
@@ -146,4 +145,13 @@ font-family: Sans-serif;
 .map {
   background-image : url("../images/facRec.jpg");
   background-size: cover
+}
+
+.adm-fi {
+  padding-top: 40px
+}
+
+.adm-sec {
+  padding-top: 30px;
+
 }

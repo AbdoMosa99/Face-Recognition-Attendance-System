@@ -8,25 +8,37 @@
 <script src="../static/js/bootstrap-validate.js"></script>
 	<div class="topnav">
           <a href="/">Home</a>
+          <a href="/attendance">Attendence</a>
           <a href="/register">Register</a>
           <a class="active" href="/admin">Admin</a>
-		</div>
-		<div class=features>
-           <form action='/admin/login' method='POST' enctype='multipart/form-data' class="form-group">
+          <a href="/contact">Contact Us</a>
+    </div>
+    <div class="container"> 
+		<div class="features px-md-5 mx-md-5">
+            <div class=" px-md-5 mx-md-5">
+           <form action='/admin/login' method='POST' enctype='multipart/form-data' class="px-md-5 mx-md-5">
               {{ form.csrf_token() }}
-                <div class="form-group">
-                    {{ form.username.label }}
-                    {{ form.username() }}
+              
+                <div class="form-group row mb-3">
+                        {{ form.username.label(class_="col-sm-2 col-form-label h4") }}
+                        <div class="col-sm-10">
+                            {{ form.username(class_="form-control form-control-lg") }}
+                        </div> 
                 </div>
-                <div class="form-group">
-                    {{ form.password.label }}
-                    {{ form.password() }}
-                </div><br>
+                
+                <div class="form-group row mb-3">
+                        {{ form.password.label(class_="col-sm-2 col-form-label h4") }}
+                        <div class="col-sm-10">
+                            {{ form.password(class_="form-control form-control-lg") }}
+                        </div> 
+                </div>
+                 
                 
               <input id="showpassword" type="checkbox" onclick="showpass()"> Show Password<br>
               <button class="btn btn-primary" id="login" name="login" type="submit" onclick="validateAdmin()">Login</button><br>
 
            </form>
+    </div>
     </div>
 
             {% with messages = get_flashed_messages() %}
@@ -34,6 +46,6 @@
                     <div class="text-center">{{ message }}</div>
                 {% endfor %}
             {% endwith %}
-
+    </div>
 {% endblock %}
 	

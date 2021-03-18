@@ -15,9 +15,10 @@ class Admin(db.Model):
 
     
 class Log(db.Model):
-    time = db.Column(db.DateTime, primary_key=True, default=datetime.now())
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime, default=datetime.now())
     activity = db.Column(db.Text, nullable=False)
-    
+
     def __repr__(self):
         return f'<Log: {self.activity}>'
 
