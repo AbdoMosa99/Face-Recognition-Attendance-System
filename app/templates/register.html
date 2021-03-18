@@ -8,37 +8,65 @@
 <script src="../static/js/bootstrap-validate.js"></script>
     <div class="topnav">
           <a href="/">Home</a>
+          <a href="/">Attendence</a>
           <a class="active" href="/register">Register</a>
           <a href="/admin">Admin</a>
+          <a href="/">Contact Us</a>
     </div>
-    <form id="myForm" action="/register" method="POST" enctype='multipart/form-data'>
-          <label for="fullname">Full Name</label><br>
-          <input type="text" id="fullname" name="fullname"><br>
-          <label for="studentid">Student ID</label><br>
-          <input type="number" id="studentid" name="studentid"><br>
-          <label for="gender">Gender</label><br>
-          <select name="gender" id="gender">
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-          </select><br>
-          <label for="email">Email</label><br>
-          <input type="text" id="email" name="email"><br>
-          <label for="university">University</label><br>
-          <select name="university" id="university">
-              {% for university in universities %}
-                    <option value="{{ university.name }}">{{ university.name }}</option>
-              {% endfor %}
-          </select><br>
-          <label for="faculty">Faculty</label><br>
-          <select name="faculty" id="faculty">
-              {% for faculty in faculties %}
-                    <option value="{{ faculty.name }}">{{ faculty.name }}</option>
-              {% endfor %}
-          </select><br>
-          <label for="courses">Courses</label><br>
-          <input type="text" id="courses" name="courses" placeholder="SE301,CS381,CS352" ><br>
-          <input id="uploadImg" name="uploadImg" type="file"><br>
-          <button class="btn btn-primary"id="reset" type="button" onclick="resetFun()">Reset</button>
-          <button class="btn btn-primary"id="register" type="submit" onclick="validateForm()">Register</button><br>
-    </form> 
+    <div class="alert alert-warning" role="alert">
+            {% for field, errors in form.errors.items() %}
+                {% for error in errors %}
+                    {{ error }}
+                    <br>
+                {% endfor %}
+            {% endfor %}
+    </div>
+    <div class=features>
+            <form action='/' method='POST' enctype='multipart/form-data' class="form-group">
+                {{ form.csrf_token() }}
+                <div class="form-group">
+                    {{ form.full_name.label }}
+                    {{ form.full_name() }}
+                </div>
+                <div class="form-group">
+                    {{ form.student_id.label }}
+                    {{ form.student_id() }}
+                </div>
+                <br>
+                <div class="form-group">
+                    {{ form.gender.label }}
+                    {{ form.gender() }}
+                </div>
+                 <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email() }}
+                 </div>
+                 <div class="form-group">
+                    {{ form.university_name.label }}
+                    {{ form.university_name() }}
+                 </div>
+                 <div class="form-group">
+                    {{ form.faculty_name.label }}
+                    {{ form.faculty_name() }}
+                 </div>
+                 <div class="form-group">
+                    {{ form.courses_codes.label }}
+                    {{ form.courses_codes() }}
+                 </div>
+                 <div class="form-group">
+                    {{ form.uploaded_file.label }}
+                    {{ form.uploaded_file() }}
+                 </div>
+                 <br>
+                    <button class="btn btn-primary"id="reset" type="button" onclick="resetFun()">Reset</button><br>
+                    <button class="btn btn-primary"id="register" type="submit" onclick="validateForm()">Register</button><br>
+
+            </form>
+    </div>
+    {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <br>
+                <div class="text-center">{{ message }}</div>
+            {% endfor %}
+    {% endwith %}
 {% endblock %}
