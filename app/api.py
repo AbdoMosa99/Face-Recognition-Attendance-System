@@ -40,7 +40,7 @@ class Attendance(Resource):
             # mark their attendance in the database
             for recognized_student in recognized_students:
                 attendance = models.Attendance(lecture_number = lecture_number,
-                                               student = recognized_student["student"][0],
+                                               student = recognized_student["student"],
                                                course = course)
                 db.session.add(attendance)
             

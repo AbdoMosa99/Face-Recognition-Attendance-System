@@ -1,25 +1,18 @@
 ### Current Tasks
 * Refactoring
-** face_recog (pickle encoding, face_recognition best, live feed)
-** __repr__ in models
-** use WTForm
-** encoding.student = list
-** api
-** database.py and services?
-** flask admin (full, custom, search)
-** hashing tech??
-** backend Validation
-** check comments, name, and quotes
+** flask admin (full, custom, search) -
+** use WTForm -
+** file names
+** add CameraStream API
 * Front end
-** JS validation
-** JS with API?
 ** redesign
+** JS validation
+** JS with API
 * testing
 * Finalize
 ** video
 ** presentation
-** final structure
-** release?
+** release -
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'
@@ -28,10 +21,6 @@
 * debugging numpy problem 'pip install numpy==1.19.3'
 * install all packages needed 'pip install -r requirements.txt'
 
-### Draft
-ph.verify(hash, "Mosa1234")
-
-b = pickle.dumps(db)
-myEntry = pickle.loads(b) 
-  
+### Draft 
+* 
   

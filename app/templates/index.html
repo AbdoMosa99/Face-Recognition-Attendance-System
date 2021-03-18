@@ -10,16 +10,38 @@
           <a href="/register">Register</a>
           <a href="/admin">Admin</a>
         </div>
+
         <h1 id="title">Face Recognition Attendence System</h1>
+
+        <div class="alert alert-warning" role="alert">
+            {% for field, errors in form.errors.items() %}
+                {% for error in errors %}
+                    {{ error }}
+                    <br>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        
         <div class=features>
             <form action='/' method='POST' enctype='multipart/form-data' class="form-group">
-                <input id='courseCode' type="text" name='courseCode' placeholder="Course Code">
-                <input id='lectureNUM' type="number" name='lectureNUM' placeholder="Lecture Number">
+                {{ form.csrf_token() }}
+                <div class="form-group">
+                    {{ form.course_code.label }}
+                    {{ form.course_code() }}
+                </div>
+                <div class="form-group">
+                    {{ form.lecture_number.label }}
+                    {{ form.lecture_number() }}
+                </div>
                 <br>
-                <input id='UploadImg' name='UploadImg' type='file'>
-                <a  href='/camfeed' id='opencamera' type="button" class="btn btn-primary">Open Camera</a>
+                <div class="form-group">
+                    {{ form.uploaded_file.label }}
+                    {{ form.uploaded_file() }}
+                </div>
                 <br>
                 <button id="submit_attend" type="submit" class="btn btn-primary">Submit</button>
+                <br>
+                <a  href='/camfeed' id='opencamera' type="button" class="btn btn-primary">Open Camera</a>
             </form>
         </div>
         {% with messages = get_flashed_messages() %}

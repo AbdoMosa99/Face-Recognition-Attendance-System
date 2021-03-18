@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-	<link rel="stylesheet" href="../static/css/admin.css">
+	<link rel="stylesheet" href="../../static/css/admin.css">
 {% endblock %}
 
 {% block body %}
@@ -11,13 +11,19 @@
           <a href="/register">Register</a>
           <a class="active" href="/admin">Admin</a>
 		</div>
-		<form name="adminForm" id="adminForm" action="/admin" method="POST">
+		<form name="adminForm" id="adminForm" action="/admin/login" method="POST">
           <label for="username">Username</label><br>
           <input type="text" id="username" name="username"><br>
           <label for="password">Password</label><br>
           <input type="password" id="mypassword" name="password"><br>
           <input id="showpassword" type="checkbox" onclick="showpass()"> Show Password<br>
           <button class="btn btn-primary" id="login" name="login" type="submit" onclick="validateAdmin()">Login</button><br>
+        
+            {% with messages = get_flashed_messages() %}
+                {% for message in messages %}
+                    <div class="text-center">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
 		</form>
 {% endblock %}
 	

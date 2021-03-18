@@ -1,24 +1,27 @@
 from flask import render_template, redirect, url_for, session, g, request, flash
-from argon2 import PasswordHasher
 import requests
 
-from app import app, models
+from app import app, models, bcrypt
+from app.forms import AttendanceForm
 
 
 # Home Route
 @app.route("/", methods=["GET", "POST"])
 def index():
+    form = AttendanceForm()
+    
     # For Post Request: Submitting an attendance
     if (request.method == "POST"):
-        # using the attendance API 
-        response = requests.post("http://127.0.0.1:5000/api/attendance",
-                                 request.form, files=request.files)
-        
-        flash(response.json()["message"])  
-        return redirect(url_for("/"))
+        if form.validate_on_submit():
+            # using the attendance API 
+            response = requests.post("http://127.0.0.1:5000/api/attendance",
+                                     request.form, files=request.files)
+
+            flash(response.json()["message"])  
+            return redirect(url_for("/", form=form))
     
     # For Get Request: Opening home page
-    return render_template("index.html")
+    return render_template("index.html", form=form)
 
 
 # Registration Route

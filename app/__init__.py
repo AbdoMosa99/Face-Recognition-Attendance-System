@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_bcrypt import Bcrypt
 
 
 # create and configure the application
@@ -13,7 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # link database and admin
 db = SQLAlchemy(app)
-admin = Admin(app)
+bcrypt = Bcrypt(app)
 
 # set up the api 
 from app.api import Registration, Attendance
@@ -27,6 +28,7 @@ from app import views
 from app import api
 
 # create the admin views
+admin = Admin(app, index_view = views.MyAdminIndexView())
 admin.add_view(ModelView(models.Student, db.session))
 admin.add_view(ModelView(models.Doctor, db.session))
 admin.add_view(ModelView(models.Course, db.session))

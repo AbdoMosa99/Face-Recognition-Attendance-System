@@ -29,10 +29,10 @@ def reset_db():
     
     
 def add_admin(username, password):
-    # hash the password using argon2
-    from argon2 import PasswordHasher
-    ph = PasswordHasher()
-    password_hash = ph.hash(password)
+    # hash the password using bcrypt
+    from app import bcrypt
+    password_hash = bcrypt.generate_password_hash(password)
+    password_hash = password_hash.decode("utf-8")
     
     # add to database
     from app import models, db

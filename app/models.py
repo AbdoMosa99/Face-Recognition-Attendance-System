@@ -5,11 +5,13 @@ from datetime import datetime
 # Stand-alone Tables
 
 class Admin(db.Model):
-    username = db.Column(db.String(255), primary_key=True)
-    password_hash = db.Column(db.String(255), nullable=False)
+    username = db.Column(db.String(255), primary_key = True)
+    password_hash = db.Column(db.String(255), nullable = False)
+    number_of_failed_attempts = db.Column(db.Integer, default = 0)
+    blocked = db.Column(db.Boolean, default = False)
     
     def __repr__(self):
-        return f'Admin {self.username} created'
+        return f'<Admin: {self.username}>'
 
     
 class Log(db.Model):
@@ -17,7 +19,7 @@ class Log(db.Model):
     activity = db.Column(db.Text, nullable=False)
     
     def __repr__(self):
-        return f'Log {self.activity} created'
+        return f'<Log: {self.activity}>'
 
 
 # Universities and faculties
@@ -27,7 +29,7 @@ class University(db.Model):
     name = db.Column(db.String(255), nullable=False)
     
     def __repr__(self):
-        return f'University {self.name} created'
+        return f'<University: {self.name}>'
 
 
 class Faculty(db.Model):
@@ -35,7 +37,7 @@ class Faculty(db.Model):
     name = db.Column(db.String(255), nullable=False)
     
     def __repr__(self):
-        return f'Faculty {self.name} created'
+        return f'<Faculty: {self.name}>'
 
 
 # Association Table for university-faculty many-to-many relationship
@@ -48,7 +50,7 @@ class UniversityFaculty(db.Model):
     faculty = db.relationship(Faculty, backref="university_faculties")
     
     def __repr__(self):
-        return f'Faculty {self.faculty_id} added to University {self.university_id}'
+        return f'<Faculty: {self.faculty.name}, University: {self.university.name}>'
     
 
 # Doctors and Courses
@@ -64,7 +66,7 @@ class Doctor(db.Model):
     university_faculty = db.relationship('UniversityFaculty', backref='doctors')
     
     def __repr__(self):
-        return f'Doctor {self.name} added'   
+        return f'<Doctor: {self.name}>'   
 
 
 class Course(db.Model):
@@ -83,7 +85,7 @@ class Course(db.Model):
     university_faculty = db.relationship('UniversityFaculty', backref='courses')
 
     def __repr__(self):
-        return f'Course {self.name} added for semester {self.semester}' 
+        return f'<Course: {self.name}, {self.semester}>' 
 
     
 # Student Related Tables
@@ -91,9 +93,6 @@ class Course(db.Model):
 class FaceEncoding(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encoding = db.Column(db.PickleType, nullable=False)
-    
-    def __repr__(self):
-        return f'Encoding {self.id} created'
 
 
 class Student(db.Model):
@@ -110,10 +109,11 @@ class Student(db.Model):
     face_encoding_id = db.Column(db.Integer, 
                                  db.ForeignKey(FaceEncoding.id), 
                                  nullable=False)
-    face_encoding = db.relationship('FaceEncoding', backref='student', uselist=False)
+    face_encoding = db.relationship('FaceEncoding', uselist=False, 
+                                    backref=db.backref("student", uselist=False))
     
     def __repr__(self):
-        return f'Student {self.name} added'
+        return f'<Student: {self.name}>'
 
 
 # Association Table for Student-Courses many-to-many relationship
@@ -127,7 +127,7 @@ class StudentCourse(db.Model):
     course = db.relationship('Course', backref='student_courses')
                             
     def __repr__(self):
-        return f'Student {self.student_id} enrolled to course {self.course_id}' 
+        return f'<Student: {self.student.name}, Course: {self.course.name}>' 
 
 
 class Attendance(db.Model):
@@ -142,4 +142,4 @@ class Attendance(db.Model):
     course = db.relationship('Course', backref='attendances')
                             
     def __repr__(self):
-        return f'Student {self.student_id} attended course {self.course_id}' 
+        return f'<Student: {self.student.name}, Course: {self.course.name}, Lecture: {self.lecture_number}>' 

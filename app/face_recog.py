@@ -68,7 +68,7 @@ class FaceRecognition():
             # draw a label with a name below the face
             cv2.rectangle(img, (left, bottom - 35), (right, bottom),
                           (0, 0, 255), cv2.FILLED)
-            cv2.putText(img, recognized_student["student"][0].name, 
+            cv2.putText(img, recognized_student["student"].name, 
                         (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX,
                         1.0, (255, 255, 255), 1)
 
