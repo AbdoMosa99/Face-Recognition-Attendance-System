@@ -39,6 +39,7 @@ def add_admin(username, password):
     admin = models.Admin(username=username, password_hash=password_hash)
     db.session.add(admin)
     db.session.commit()
+
     
 def add_log(log_message):
     from app import db

@@ -23,6 +23,15 @@
                 with face recognition technology.
 
             </h3>
+            
+            {% with messages = get_flashed_messages() %}
+                {% for message in messages %}
+                    <div class="alert alert-info text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+            
         </div>
     </div>
     

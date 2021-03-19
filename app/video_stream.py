@@ -1,7 +1,7 @@
 import cv2
 from imutils.video import WebcamVideoStream
 from app.face_recog import FaceRecognition
-
+from app import models, db
 
 class StreamProcessing():
     stream = None
@@ -25,7 +25,8 @@ class StreamProcessing():
         """A function that do the actual work of reading from the webcam stream,
         and processes it and sends the new image to represent,
         then repeats until the stream stops."""
-
+        already_added_students = []
+        
         while StreamProcessing.running:
             frame = StreamProcessing.get_frame()
             
@@ -39,6 +40,15 @@ class StreamProcessing():
                                                   recognized_student["location"][1] * 4,
                                                   recognized_student["location"][2] * 4,
                                                   recognized_student["location"][3] * 4)
+                
+                if recognized_student["student"] not in already_added_students:
+                    attendance = models.Attendance(lecture_number = 3,
+                                              student = recognized_student["student"],
+                                              course_id = 1)
+                    db.session.add(attendance)
+                    db.session.commit()
+                    already_added_students.append(recognized_student["student"])
+                
             
             out_frame = FaceRecognition.represent_image(frame, recognized_students)
             
