@@ -36,7 +36,7 @@ class RegistrationForm(FlaskForm):
     
     gender = SelectField(label = "Gender",
                         validators = [DataRequired()],
-                        choices = [("M", "Mail"), ("F", "Female")])
+                        choices = [("M", "Male"), ("F", "Female")])
     
     email = StringField(label = "Email",
                        validators = [DataRequired(), 

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import face_recognition
 import pickle
-
+from app.models import FaceEncoding
 
 # A class that handles all face recoginition processes and representation 
 class FaceRecognition():
@@ -26,9 +26,11 @@ class FaceRecognition():
         return encodings[0]
 
     
-    def process_image(img, known_encodings_db):
+    def process_image(img):
         """A function that takes an RGB image,
         and returns the students in it with their face locations."""
+        
+        known_encodings_db = FaceEncoding.query.all()
         
         # get faces locations and encodings
         face_locations = face_recognition.face_locations(img)
@@ -38,16 +40,16 @@ class FaceRecognition():
         known_encodings = list(map(
             lambda enc: pickle.loads(enc.encoding),
             known_encodings_db))
-        
         # for all encodings in the image,
         # get the matches of students if exists in the db
         recognized_students = []
         for i in range(len(unknown_encodings)):
             unknown_encoding = unknown_encodings[i]
             matches = face_recognition.compare_faces(known_encodings, unknown_encoding)
-
+            
             if True in matches:
-                first_match_index = matches.index(True)               
+                first_match_index = matches.index(True)
+                
                 recognized_students.append({
                     "student": known_encodings_db[first_match_index].student,
                     "location": face_locations[i]

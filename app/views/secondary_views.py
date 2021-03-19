@@ -13,9 +13,8 @@ def cam_feed():
 # Live video feedback window
 @app.route('/video_feed')
 def video_feed():
-    known_encodings_db = models.FaceEncoding.query.all()
     StreamProcessing.start()
-    return Response(StreamProcessing.process(known_encodings_db),
+    return Response(StreamProcessing.process(),
                     mimetype = 'multipart/x-mixed-replace; boundary=frame')
 
 

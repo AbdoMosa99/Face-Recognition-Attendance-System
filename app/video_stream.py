@@ -21,7 +21,7 @@ class StreamProcessing():
         return frame
 
     
-    def process(known_encodings_db):
+    def process():
         """A function that do the actual work of reading from the webcam stream,
         and processes it and sends the new image to represent,
         then repeats until the stream stops."""
@@ -31,9 +31,7 @@ class StreamProcessing():
             
             # resize frame of video to 1/4 size for faster processing
             processing_frame = cv2.resize(frame, (0, 0), fx = 0.25, fy = 0.25)
-            
-            recognized_students = FaceRecognition.process_image(processing_frame,
-                                                                known_encodings_db)
+            recognized_students = FaceRecognition.process_image(processing_frame)
             
             # scale back up face locations as the processing frame was scaled to 1/4 size
             for recognized_student in recognized_students:

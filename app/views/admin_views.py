@@ -37,7 +37,7 @@ class MyAdminIndexView(AdminIndexView):
                 session["username"] = username # keep logged in
                 add_log(f"{username} has successfully logged in.")
                 return redirect(url_for(".index"))
-            except:
+            except Exception as e:
                 add_log(f"There has been a failed attempt of login with the exception {e}.")
                 flash("Wrong username or password!")
                 return redirect(url_for('.login_view'))

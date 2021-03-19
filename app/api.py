@@ -23,8 +23,7 @@ class Attendance(Resource):
             
             # get students in the image from db through face recognition
             img = FaceRecognition.file2RGB(form.uploaded_file.data)
-            known_encodings_db = models.FaceEncoding.query.all()
-            recognized_students = FaceRecognition.process_image(img, known_encodings_db)
+            recognized_students = FaceRecognition.process_image(img)
             if not recognized_students:
                 add_log(f"There has been a failed attempt of attendance due to no identified students in the image.")
                 return {"message": "Sorry! We couldn't identify anyone."}

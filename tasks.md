@@ -1,6 +1,8 @@
 ### Current Tasks
-* Refactoring
-** testing
+* Touches
+** logout admin
+
+* testing
 * Finalize
 ** video
 ** presentation

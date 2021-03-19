@@ -15,12 +15,41 @@
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap2/swatch/{swatch}/bootstrap.min.css'.format(swatch=config.get('FLASK_ADMIN_SWATCH', 'default')), v='2.3.2') }}" rel="stylesheet">
         <link href="{{ admin_static.url(filename='bootstrap/bootstrap2/css/bootstrap-responsive.css', v='2.3.2') }}" rel="stylesheet">
         <link href="{{ admin_static.url(filename='admin/css/bootstrap2/admin.css', v='1.1.1') }}" rel="stylesheet">
-        <link rel="stylesheet" href="../../static/css/style.css">
         {% if admin_view.extra_css %}
           {% for css_url in admin_view.extra_css %}
             <link href="{{ css_url }}" rel="stylesheet">
           {% endfor %}
         {% endif %}
+      
+      <style>
+        .topnav {
+          background-color: black;
+          overflow: hidden;
+        }
+
+        /* Style the links inside the navigation bar */
+        .topnav a {
+          float: left;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+          font-family: Sans-serif;
+        }
+
+        /* Change the color of links on hover */
+        .topnav a:hover {
+          background-color: #ddd;
+          color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .topnav a.active {
+          background-color: #327ba8;
+          color: white;
+        }
+      </style>
     {% endblock %}
     {% block head %}
     {% endblock %}
@@ -29,7 +58,7 @@
   </head>
   <body>
     {% block page_body %}
-    <div class="topnav">
+    <div class="topnav" style="margin-bottom: 2%">
           <a href="/">Home</a>
           <a href="/attendance">Attendence</a>
           <a href="/register">Register</a>
