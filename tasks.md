@@ -1,12 +1,8 @@
 ### Current Tasks
-* Touches
-** logout admin
-
-* testing
-* Finalize
-** video
-** presentation
+** testing
 ** release -
+** server cam opens? (flask-opencv-streamer)
+** upload video and process it
 ** final revise
 
 ### Notes 

@@ -14,7 +14,7 @@ class FaceRecognition():
         img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR) # decode it into image
         rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # convert image to RGB
         return rgb
-
+    
     
     def get_encoding(img):
         """A function that takes an RGB image,
@@ -68,12 +68,21 @@ class FaceRecognition():
             # draw a box around the face
             cv2.rectangle(img, (left, top), (right, bottom), (0, 0, 255), 2)
             
+            # prepare name to be displayed
+            name = recognized_student["student"].name
+            if len(name) > 9:
+                name = name.split(' ')[0]
+                if len(name) > 9:
+                    name = name[:9]
+            
             # draw a label with a name below the face
             cv2.rectangle(img, (left, bottom - 35), (right, bottom),
                           (0, 0, 255), cv2.FILLED)
-            cv2.putText(img, recognized_student["student"].name, 
+            cv2.putText(img, name, 
                         (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX,
                         1.0, (255, 255, 255), 1)
-
+            
+            
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         return img
        

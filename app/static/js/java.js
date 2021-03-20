@@ -1,7 +1,7 @@
 /* admin page*/
 
 function showpass() {
-  var x = document.getElementById("mypassword");
+  var x = document.getElementById("password");
   if (x.type === "password") {
     x.type = "text";
   } else {
