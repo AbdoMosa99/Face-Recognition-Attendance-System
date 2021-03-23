@@ -40,6 +40,7 @@ class FaceRecognition():
         known_encodings = list(map(
             lambda enc: pickle.loads(enc.encoding),
             known_encodings_db))
+        
         # for all encodings in the image,
         # get the matches of students if exists in the db
         recognized_students = []

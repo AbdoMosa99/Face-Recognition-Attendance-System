@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, Response
-from app import app, socketio
+from app import app, socketio, db
 from app.face_recog import FaceRecognition
 from app import models
 from flask_socketio import emit
@@ -30,6 +30,8 @@ def error(e):
     return render_template('error.html'), 500
 
 
+already_added_students = []
+
 @socketio.on('image')
 def image(data_image):    
     # decode and convert into image
@@ -41,20 +43,20 @@ def image(data_image):
     
     # Process the image frame
     recognized_students = FaceRecognition.process_image(frame)
-
-
-#        if recognized_student["student"] not in StreamProcessing.already_added_students:
-#            attendance = models.Attendance(lecture_number = 3,
-#                                      student = recognized_student["student"],
-#                                      course_id = 1)
-#            db.session.add(attendance)
-#            db.session.commit()
-#            already_added_students.append(recognized_student["student"])
-
-
     out_frame = FaceRecognition.represent_image(frame, recognized_students)
     
+    # Mark their attendance
+    for recognized_student in recognized_students:
+        if recognized_student["student"] not in already_added_students:
+            attendance = models.Attendance(lecture_number = 3,
+                                      student = recognized_student["student"],
+                                      course_id = 1)
+            db.session.add(attendance)
+            db.session.commit()
+            already_added_students.append(recognized_student["student"])
+
     
+    # encode it to jpg
     imgencode = cv2.imencode('.jpg', out_frame)[1]
 
     # base64 encode
