@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
+
+{% block head %}
+	<link rel="stylesheet" href="../../static/css/admin.css">
+{% endblock %}
+
+
 {% block body %}
+<script defer src="../static/js/socketio.js"></script>
+<script defer src="../static/js/socket.js"></script>
+
 <div class="topnav">
           <a href="/">Home</a>
           <a class="active" href="/attendance">Attendence</a>
@@ -12,8 +21,16 @@
 <div class="col-md-12 text-center">
     <h1>Processing your face ...</h1>
     <br>
-    <img src='/video_feed'>
+    
+    <div id="container">
+        <canvas hidden id="canvasOutput"></canvas>
+        <video hidden autoplay="true" id="videoElement"></video>
+    </div>
+    <div class = 'video'>
+        <img id="image">
+    </div>
+    
     <br>
-    <h2><a href='/close_cam'>Go back</a></h2>
+    <h2><a href='/'>Go back</a></h2>
 </div>
 {% endblock %}

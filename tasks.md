@@ -1,9 +1,9 @@
 ### Current Tasks
-** testing
-** release -
-** server cam opens? (flask-opencv-streamer)
-** upload video and process it
-** final revise
+** some js (api)
+** more code in the presentation
+** simulation
+** more refactoring
+** production?
 
 ### Notes 
 * to activate the env from the code directory 'env\Scripts\activate'

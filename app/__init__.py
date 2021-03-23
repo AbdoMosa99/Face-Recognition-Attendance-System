@@ -4,6 +4,7 @@ from flask_restful import Api
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_bcrypt import Bcrypt
+from flask_socketio import SocketIO
 
 
 # create and configure the application
@@ -15,6 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # link database and admin
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+socketio = SocketIO(app)
 
 # set up the api 
 from app.api import Registration, Attendance

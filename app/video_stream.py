@@ -6,6 +6,7 @@ from app import models, db
 class StreamProcessing():
     stream = None
     running = False
+    already_added_students = []
     
     
     def start():
@@ -25,38 +26,12 @@ class StreamProcessing():
         """A function that do the actual work of reading from the webcam stream,
         and processes it and sends the new image to represent,
         then repeats until the stream stops."""
-        already_added_students = []
         
-        while StreamProcessing.running:
-            frame = StreamProcessing.get_frame()
+        frame = StreamProcessing.get_frame()
+
+        # resize frame of video to 1/4 size for faster processing
+        
             
-            # resize frame of video to 1/4 size for faster processing
-            processing_frame = cv2.resize(frame, (0, 0), fx = 0.25, fy = 0.25)
-            recognized_students = FaceRecognition.process_image(processing_frame)
-            
-            # scale back up face locations as the processing frame was scaled to 1/4 size
-            for recognized_student in recognized_students:
-                recognized_student["location"] = (recognized_student["location"][0] * 4,
-                                                  recognized_student["location"][1] * 4,
-                                                  recognized_student["location"][2] * 4,
-                                                  recognized_student["location"][3] * 4)
-                
-                if recognized_student["student"] not in already_added_students:
-                    attendance = models.Attendance(lecture_number = 3,
-                                              student = recognized_student["student"],
-                                              course_id = 1)
-                    db.session.add(attendance)
-                    db.session.commit()
-                    already_added_students.append(recognized_student["student"])
-                
-            
-            out_frame = FaceRecognition.represent_image(frame, recognized_students)
-            
-            # convert frame back to jpg format bytes and send it
-            ret, jpeg = cv2.imencode('.jpg', out_frame)
-            out_frame = jpeg.tobytes()
-            yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + out_frame + b'\r\n\r\n')
            
         
     def stop():
